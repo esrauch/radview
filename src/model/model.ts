@@ -18,7 +18,7 @@ class Model extends Listenable {
     readonly colorer = new Colorer(ColorStrat.WHITE)
     readonly deselectedColorer = new Colorer(ColorStrat.GRAY)
 
-    citySelect: CitySelect = 'none'
+    citySelect: CitySelect = 'high'
 
     init(activities: ActivityJson[]) {
         this.activities = activities

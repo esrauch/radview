@@ -13,6 +13,14 @@ export const rideFilterSelect = document.querySelector('#ride') as HTMLSelectEle
 
 export const citySelect = document.querySelector('#city') as HTMLSelectElement
 
+export const showOptions = document.querySelector('#showOptions')!
+
+export const hideOptions = document.querySelector('#hideOptions')!
+
+export const sidebarExpanded = document.querySelector('#sidebar_expanded') as HTMLElement
+
+export const sidebarCollapsed = document.querySelector('#sidebar_collapsed') as HTMLElement
+
 export function trueSizeCanvas() {
     canvas.width = Math.max(1, parseInt(getComputedStyle(canvas).width))
     canvas.height = Math.max(1, parseInt(getComputedStyle(canvas).height))

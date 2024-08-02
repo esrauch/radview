@@ -14,7 +14,7 @@ class Model extends Listenable {
         this.cam = new Camera();
         this.colorer = new Colorer(ColorStrat.WHITE);
         this.deselectedColorer = new Colorer(ColorStrat.GRAY);
-        this.citySelect = 'none';
+        this.citySelect = 'high';
     }
     init(activities) {
         this.activities = activities;

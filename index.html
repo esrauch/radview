@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
 <head>
-    <title></title>
+    <title>Rad View</title>
     <style>
         * {
             margin: 0;
@@ -13,14 +13,19 @@
             font-size: 16px;
         }
 
+        button {
+            border: 1px solid white;
+            padding: 3px;
+        }
+
         h2 {
-            padding-bottom: 10px;
-            font-size: 24px;
+            padding-bottom: 6px;
+            font-size: 20px;
         }
 
         hr {
             border-top: 1px solid white;
-            margin: 30px 0;
+            margin: 20px 0;
         }
 
         table {
@@ -57,14 +62,20 @@
             max-height: 100%;
             overflow-y: auto;
         }
+
+        .sidebar.collapsed {
+            width: 100px;
+            padding: 0;
+        }
     </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 </head>
 
 <body>
     <div class="map">
         <canvas width="800" height="600"></canvas>
     </div>
-    <div class="sidebar">
+    <div class="sidebar" id="sidebar_expanded">
         <h2>Color coding</h2>
         <select id="coloring">
             <option label="None" value="0"></option>
@@ -87,12 +98,18 @@
         <h2>City Highlight</h2>
         <select id="city">
             <option label="None" value="none"></option>
-            <option label="Highlight" value="high"></option>
+            <option label="Highlight" value="high" selected></option>
             <option label="Clip Somerville" value="clip_somerville"></option>
             <option label="Clip Cambridge" value="clip_cam"></option>
         </select>
 
         <hr>
+
+        <button id="hideOptions">Hide options</button>
+    </div>
+
+    <div class="sidebar collapsed" id="sidebar_collapsed" style="display:none;">
+        <button id="showOptions">Show options</button>
     </div>
 
     <script type="module" src="out/main.js"></script>

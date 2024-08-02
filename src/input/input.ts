@@ -1,4 +1,4 @@
-import { citySelect, colorInputSelect } from "../dom.js"
+import { citySelect, colorInputSelect, hideOptions, showOptions, sidebarCollapsed, sidebarExpanded } from "../dom.js"
 import { ColorStrat } from "../model/coloring.js"
 import { CitySelect, model } from "../model/model.js"
 import { initMouse } from "./mouse.js"
@@ -16,6 +16,16 @@ export function initInput() {
 
     citySelect.addEventListener('change', () => {
         model.setCitySelect(citySelect.selectedOptions[0].value as CitySelect)
+    })
+
+    showOptions.addEventListener('click', () => {
+        sidebarExpanded.style.display = ''
+        sidebarCollapsed.style.display = 'none'
+    })
+
+    hideOptions.addEventListener('click', () => {
+        sidebarExpanded.style.display = 'none'
+        sidebarCollapsed.style.display = ''
     })
 }
 

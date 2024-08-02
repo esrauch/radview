@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+
+<head>
+    <title></title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            border: 0;
+            border-radius: 0;
+            background-color: black;
+            color: white;
+            font-size: 16px;
+        }
+
+        h2 {
+            padding-bottom: 10px;
+            font-size: 24px;
+        }
+
+        hr {
+            border-top: 1px solid white;
+            margin: 30px 0;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        td {
+            border: 1px solid white;
+            padding: 3px;
+        }
+
+        select {
+            outline: 1px solid white;
+            outline-offset: -1px;
+            width: 100%;
+        }
+
+        canvas {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+        }
+
+        .sidebar {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 340px;
+            border-left: 1px solid #fff;
+            border-bottom: 1px solid #fff;
+            padding: 30px;
+            font-family: sans-serif;
+            max-height: 100%;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="map">
+        <canvas width="800" height="600"></canvas>
+    </div>
+    <div class="sidebar">
+        <h2>Color coding</h2>
+        <select id="coloring">
+            <option label="None" value="0"></option>
+            <option label="Heart Rate (BPM)" value="1"></option>
+            <option label="Speed (MPH)" value="2"></option>
+            <option label="Elevation (meters)" value="3"></option>
+        </select>
+        <div id="colorTableParent"></div>
+
+        <hr>
+
+        <h2>Ride Filter</h2>
+        <select id="ride">
+            <option label="Show All" value="all"></option>
+        </select>
+        <div class="desc"></div>
+
+        <hr>
+
+        <h2>City Highlight</h2>
+        <select id="city">
+            <option label="None" value="none"></option>
+            <option label="Highlight" value="high"></option>
+            <option label="Clip Somerville" value="clip_somerville"></option>
+            <option label="Clip Cambridge" value="clip_cam"></option>
+        </select>
+
+        <hr>
+    </div>
+
+    <script type="module" src="out/main.js"></script>
+</body>

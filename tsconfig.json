@@ -1,0 +1,19 @@
+{
+    "compilerOptions": {
+        "target": "es6",
+        "module": "es6",
+        "sourceMap": false,
+        "strict": true,
+        "outDir": "out",
+        "lib": [
+            "dom",
+            "es2015",
+            "es2019",
+            "es2021",
+            "es5",
+            "es6",
+            "es2017.object"
+        ],
+        "noFallthroughCasesInSwitch": true,
+    }
+}

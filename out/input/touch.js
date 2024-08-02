@@ -8,8 +8,8 @@ export function initTouch() {
 }
 function xyForTouch(t) {
     const bcr = t.target.getBoundingClientRect();
-    const x = t.clientX - bcr.x;
-    const y = t.clientY - bcr.y;
+    const x = t.clientX * devicePixelRatio - bcr.x;
+    const y = t.clientY * devicePixelRatio - bcr.y;
     return { x, y };
 }
 function xyDist(a, b) {

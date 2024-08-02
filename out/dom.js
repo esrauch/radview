@@ -9,9 +9,10 @@ export const showOptions = document.querySelector('#showOptions');
 export const hideOptions = document.querySelector('#hideOptions');
 export const sidebarExpanded = document.querySelector('#sidebar_expanded');
 export const sidebarCollapsed = document.querySelector('#sidebar_collapsed');
+export const downloadPng = document.querySelector("#save");
 export function trueSizeCanvas() {
-    canvas.width = Math.max(1, parseInt(getComputedStyle(canvas).width));
-    canvas.height = Math.max(1, parseInt(getComputedStyle(canvas).height));
+    canvas.width = Math.max(1, parseInt(getComputedStyle(canvas).width)) * devicePixelRatio;
+    canvas.height = Math.max(1, parseInt(getComputedStyle(canvas).height)) * devicePixelRatio;
     renderImmediate();
 }
 new ResizeObserver(trueSizeCanvas).observe(canvas);

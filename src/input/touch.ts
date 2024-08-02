@@ -13,8 +13,8 @@ type XY = { x: number, y: number }
 
 function xyForTouch(t: Touch): XY {
     const bcr = (t.target as Element).getBoundingClientRect()
-    const x = t.clientX - bcr.x
-    const y = t.clientY - bcr.y
+    const x = t.clientX * devicePixelRatio - bcr.x
+    const y = t.clientY * devicePixelRatio - bcr.y
     return { x, y }
 }
 

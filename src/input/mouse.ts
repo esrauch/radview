@@ -33,7 +33,7 @@ function onMouseWheel(evt: Event) {
 
 function onMouseMove(evt: MouseEvent) {
     if (evt.buttons == 0) return
-    const delta = model.cam.mapInverseDelta(xyForMouseEvent(evt))
+    const delta = model.cam.mapInverseDelta({ x: evt.movementX, y: evt.movementY })
     model.cam.pan(delta)
     evt.preventDefault()
 }

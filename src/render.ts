@@ -125,7 +125,7 @@ export function renderImmediate() {
 
     const pt = cam.map({ x: APPROXIMATE_HOME.lon, y: APPROXIMATE_HOME.lat })
     const radius = cam.mapDelta({ x: HOME_PRIVACY_CIRCLE_RADIUS_DEG, y: 0 }).x
-    ctx.fillStyle = '#fff'
+    ctx.fillStyle = '#555'
     ctx.beginPath()
     ctx.arc(pt.x, pt.y, radius, 0, 2 * Math.PI)
     ctx.closePath()

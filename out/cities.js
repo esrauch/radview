@@ -1,4 +1,4 @@
-const DEDESTORT = 0.7390340695856275;
+import { DEDISTORT } from "./model/dedistort.js";
 export const SOMERVILLE = [
     { x: -7.113459E+01, y: 4.240424E+01 },
     { x: -7.113454E+01, y: 4.240487E+01 },
@@ -190,7 +190,7 @@ export const SOMERVILLE = [
     { x: -7.112789E+01, y: 4.239766E+01 },
     { x: -7.113146E+01, y: 4.240168E+01 },
     { x: -7.113459E+01, y: 4.240424E+01 },
-].map(pt => ({ x: DEDESTORT * pt.x, y: pt.y }));
+].map(pt => ({ x: DEDISTORT * pt.x, y: pt.y }));
 // export const CAMBRIDGE = [
 //     { x: -52.57083731228646, y: 42.40397751308039 }
 //     , { x: -52.57090574451199, y: 42.40311070489032 }
@@ -434,7 +434,7 @@ export const CAMBRIDGE = [
     { x: -7.115029E+01, y: 4.237432E+01 },
     { x: -7.115043E+01, y: 4.237457E+01 },
     { x: -7.115427E+01, y: 4.237509E+01 },
-].map(pt => ({ x: DEDESTORT * pt.x, y: pt.y }));
+].map(pt => ({ x: DEDISTORT * pt.x, y: pt.y }));
 export const ARLINGTON = [
     { x: -7.120060E+01, y: 4.241696E+01 },
     { x: -7.120017E+01, y: 4.241687E+01 },
@@ -598,7 +598,7 @@ export const ARLINGTON = [
     { x: -7.119622E+01, y: 4.242154E+01 },
     { x: -7.119921E+01, y: 4.241855E+01 },
     { x: -7.120060E+01, y: 4.241696E+01 },
-].map(pt => ({ x: DEDESTORT * pt.x, y: pt.y }));
+].map(pt => ({ x: DEDISTORT * pt.x, y: pt.y }));
 export const MEDFORD = [
     { x: -7.114986E+01, y: 4.243575E01 },
     { x: -7.114743E+01, y: 4.242696E01 },
@@ -837,7 +837,7 @@ export const MEDFORD = [
     { x: -7.112743E+01, y: 4.243813E01 },
     { x: -7.112900E+01, y: 4.243543E01 },
     { x: -7.114986E+01, y: 4.243575E01 },
-].map(pt => ({ x: DEDESTORT * pt.x, y: pt.y }));
+].map(pt => ({ x: DEDISTORT * pt.x, y: pt.y }));
 export const BOSTON = [
     { x: -7.119126E+01, y: 4.228284E+01 },
     { x: -7.117864E+01, y: 4.229454E+01 },
@@ -1288,8 +1288,8 @@ export const BOSTON = [
     { x: -7.119074E+01, y: 4.228192E+01 },
     { x: -7.119107E+01, y: 4.228232E+01 },
     { x: -7.119126E+01, y: 4.228284E+01 },
-].map(pt => ({ x: DEDESTORT * pt.x, y: pt.y }));
-function path(ctx, cam, pts) {
+].map(pt => ({ x: DEDISTORT * pt.x, y: pt.y }));
+export function path(ctx, cam, pts) {
     ctx.beginPath();
     for (let i = 0; i < pts.length; ++i) {
         const pt = pts[i];

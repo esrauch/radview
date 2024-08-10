@@ -3,6 +3,7 @@ import { model } from "./model/model.js";
 import { cambridge, fillCities, somerville } from "./cities.js";
 import { DISCONTIGUOUS_MS } from "./model/gpx_json.js";
 import { APPROXIMATE_HOME, HOME_PRIVACY_CIRCLE_RADIUS_DEG } from "./model/privacy.js";
+import { DEDISTORT } from "./model/dedistort.js";
 let renderPending = false;
 export function render() {
     if (renderPending)
@@ -12,6 +13,7 @@ export function render() {
 }
 // Forces a synchronous render, should be used rarely and render() preferred
 export function renderImmediate() {
+    var _a;
     renderPending = false;
     const start = performance.now();
     const canvasw = canvas.width;
@@ -34,6 +36,25 @@ export function renderImmediate() {
     }
     if (model.citySelect === 'high') {
         fillCities(ctx, cam);
+    }
+    const waters = (_a = model.world) === null || _a === void 0 ? void 0 : _a.waters;
+    if (waters) {
+        ctx.fillStyle = '#358';
+        ctx.strokeStyle = '#358';
+        for (const w of waters) {
+            ctx.beginPath();
+            for (const pt of w.bank) {
+                const mapped = cam.map({ x: DEDISTORT * pt.lon, y: pt.lat });
+                ctx.lineTo(mapped.x, mapped.y);
+                // console.log(mapped)
+            }
+            if (w.closed) {
+                ctx.closePath();
+                ctx.fill();
+            }
+            else
+                ctx.stroke();
+        }
     }
     function renderActivity(a, colorer) {
         const pts = a.pts;

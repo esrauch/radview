@@ -1,0 +1,1 @@
+export const DEDISTORT = 0.7390340695856275;

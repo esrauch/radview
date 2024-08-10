@@ -19,27 +19,27 @@ function zone(val, thresholds) {
 }
 const HR_MAX = 190;
 const hrThresholds = [
-    0.55 * HR_MAX,
-    0.65 * HR_MAX,
-    0.75 * HR_MAX,
-    0.85 * HR_MAX,
-    0.90 * HR_MAX,
+    0.55 * HR_MAX, // 0
+    0.65 * HR_MAX, // 1
+    0.75 * HR_MAX, // 2
+    0.85 * HR_MAX, // 3
+    0.90 * HR_MAX, // 4
     HR_MAX, // 5  (anything higher will be 6
 ];
 const mphThresholds = [
-    6,
-    9,
-    11,
-    13,
-    16,
+    6, // 0
+    9, // 1
+    11, // 2
+    13, // 3
+    16, // 4
     20, // 5 (anything higher will be 6
 ];
 const eleThresholds = [
-    5,
-    10,
-    15,
-    20,
-    25,
+    5, // 0
+    10, // 1
+    15, // 2
+    20, // 3
+    25, // 4
     30, // 5 (anything higher will be 6
 ];
 const zoneRgbs = {

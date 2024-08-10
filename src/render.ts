@@ -4,6 +4,7 @@ import { Colorer } from "./model/coloring.js"
 import { cambridge, fillCities, somerville } from "./cities.js"
 import { ActivityJson, DISCONTIGUOUS_MS } from "./model/gpx_json.js"
 import { APPROXIMATE_HOME, HOME_PRIVACY_CIRCLE_RADIUS_DEG } from "./model/privacy.js"
+import { DEDISTORT } from "./model/dedistort.js"
 
 
 let renderPending = false
@@ -43,6 +44,27 @@ export function renderImmediate() {
 
     if (model.citySelect === 'high') {
         fillCities(ctx, cam)
+    }
+
+    const waters = model.world?.waters
+    if (waters) {
+        ctx.fillStyle = '#358'
+        ctx.strokeStyle = '#358'
+
+        for (const w of waters) {
+            ctx.beginPath()
+            for (const pt of w.bank) {
+                const mapped = cam.map({ x: DEDISTORT * pt.lon, y: pt.lat })
+                ctx.lineTo(mapped.x, mapped.y)
+                // console.log(mapped)
+            }
+
+            if (w.closed) {
+                ctx.closePath()
+                ctx.fill()
+            } else
+                ctx.stroke()
+        }
     }
 
     function renderActivity(a: ActivityJson, colorer: Colorer) {

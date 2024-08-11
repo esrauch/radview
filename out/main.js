@@ -13,19 +13,19 @@ import { initInput } from "./input/input.js";
 import { colorTableParent, trueSizeCanvas } from "./dom.js";
 function load() {
     return __awaiter(this, void 0, void 0, function* () {
-        const worldJsonFile = yield fetch('world_json');
-        if (!worldJsonFile.ok) {
+        const waterJsonFile = yield fetch('water_json');
+        if (!waterJsonFile.ok) {
             alert('failed to open world json');
             throw 'failed to open world json';
         }
-        const world = (yield worldJsonFile.json());
+        const waterWorld = (yield waterJsonFile.json());
         const activityJsonFile = yield fetch('gpx_json');
         if (!activityJsonFile.ok) {
             alert('failed to open json');
             throw ('failed to open json');
         }
         const activities = (yield activityJsonFile.json());
-        model.init(activities, world);
+        model.init(activities, waterWorld.waters);
         initInput();
         model.addListener(render);
         model.cam.addListener(render);

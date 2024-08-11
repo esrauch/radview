@@ -46,7 +46,7 @@ export function renderImmediate() {
         fillCities(ctx, cam)
     }
 
-    const waters = model.world?.waters
+    const waters = model.waters
     if (waters) {
         ctx.fillStyle = '#358'
         ctx.strokeStyle = '#358'

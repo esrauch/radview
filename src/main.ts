@@ -6,12 +6,12 @@ import { colorTableParent, trueSizeCanvas } from "./dom.js"
 import { ActivityJson } from "./model/gpx_json.js"
 
 async function load() {
-    const worldJsonFile = await fetch('world_json')
-    if (!worldJsonFile.ok) {
+    const waterJsonFile = await fetch('water_json')
+    if (!waterJsonFile.ok) {
         alert('failed to open world json')
         throw 'failed to open world json'
     }
-    const world = (await worldJsonFile.json()) as World
+    const waterWorld = (await waterJsonFile.json()) as World
 
     const activityJsonFile = await fetch('gpx_json')
     if (!activityJsonFile.ok) {
@@ -20,7 +20,7 @@ async function load() {
     }
     const activities = (await activityJsonFile.json()) as ActivityJson[]
 
-    model.init(activities, world)
+    model.init(activities, waterWorld.waters)
     initInput()
     model.addListener(render)
     model.cam.addListener(render)

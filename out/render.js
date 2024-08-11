@@ -13,7 +13,6 @@ export function render() {
 }
 // Forces a synchronous render, should be used rarely and render() preferred
 export function renderImmediate() {
-    var _a;
     renderPending = false;
     const start = performance.now();
     const canvasw = canvas.width;
@@ -37,7 +36,7 @@ export function renderImmediate() {
     if (model.citySelect === 'high') {
         fillCities(ctx, cam);
     }
-    const waters = (_a = model.world) === null || _a === void 0 ? void 0 : _a.waters;
+    const waters = model.waters;
     if (waters) {
         ctx.fillStyle = '#358';
         ctx.strokeStyle = '#358';

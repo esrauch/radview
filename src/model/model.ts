@@ -4,7 +4,7 @@ import { Listenable } from "../listenable.js"
 import { ColorStrat, Colorer } from "./coloring.js"
 import { min, max } from "../util/util.js"
 import { ActivityJson, activityToString } from "./gpx_json.js"
-import { World } from "./world_json.js"
+import { Water, World } from "./world_json.js"
 
 export type CitySelect = 'none' | 'high' | 'clip_somerville' | 'clip_cam'
 
@@ -15,7 +15,7 @@ class Model extends Listenable {
     current: Array<Readonly<ActivityJson>> = []
     current_nth: number | null = null  // null == ALL
 
-    world: Readonly<World> | null = null
+    waters: Readonly<Water[]> | null = null
 
     readonly cam = new Camera()
     readonly colorer = new Colorer(ColorStrat.WHITE)
@@ -23,9 +23,9 @@ class Model extends Listenable {
 
     citySelect: CitySelect = 'high'
 
-    init(activities: ActivityJson[], world: World) {
+    init(activities: ActivityJson[], waters: Water[]) {
         this.activities = activities
-        this.world = world
+        this.waters = waters
 
         const miles = activities.map(a => a.miles)
         this.desc = `Shortest trip: ${Math.min(...miles).toPrecision(3)}mi

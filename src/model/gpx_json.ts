@@ -3,7 +3,7 @@ import { durationMsToHHMMSS } from "../util/time.js"
 // Number of ms between points to count as discontiguous
 // This affects both the gpx_json generation and
 // the rendering
-export const DISCONTIGUOUS_MS = 1000 * 60
+export const DISCONTIGUOUS_MS = 1000 * 60 * 5
 
 
 // The (dedistorted) lat/lon of a randomly offset location of home.

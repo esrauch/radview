@@ -46,7 +46,6 @@ export function renderImmediate() {
             for (const pt of w.bank) {
                 const mapped = cam.map({ x: DEDISTORT * pt.lon, y: pt.lat });
                 ctx.lineTo(mapped.x, mapped.y);
-                // console.log(mapped)
             }
             if (w.closed) {
                 ctx.closePath();

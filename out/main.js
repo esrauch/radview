@@ -19,13 +19,19 @@ function load() {
             throw 'failed to open world json';
         }
         const waterWorld = (yield waterJsonFile.json());
+        // const pathsJsonFile = await fetch('paths_with_seen_json')
+        // if (!pathsJsonFile.ok) {
+        //     alert('failed to open world json')
+        //     throw 'failed to open world json'
+        // }
+        // const pathsWorld = (await pathsJsonFile.json()) as World
         const activityJsonFile = yield fetch('gpx_json');
         if (!activityJsonFile.ok) {
             alert('failed to open json');
             throw ('failed to open json');
         }
         const activities = (yield activityJsonFile.json());
-        model.init(activities, waterWorld.waters);
+        model.init(activities, waterWorld.waters, []); //pathsWorld.paths)
         initInput();
         model.addListener(render);
         model.cam.addListener(render);

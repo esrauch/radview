@@ -11,15 +11,17 @@ class Model extends Listenable {
         this.desc = '';
         this.current = [];
         this.current_nth = null; // null == ALL
+        this.paths = null;
         this.waters = null;
         this.cam = new Camera();
         this.colorer = new Colorer(ColorStrat.WHITE);
         this.deselectedColorer = new Colorer(ColorStrat.GRAY);
-        this.citySelect = 'high';
+        this.citySelect = 'none';
     }
-    init(activities, waters) {
+    init(activities, waters, paths) {
         this.activities = activities;
         this.waters = waters;
+        this.paths = paths;
         const miles = activities.map(a => a.miles);
         this.desc = `Shortest trip: ${Math.min(...miles).toPrecision(3)}mi
             Longest trip: ${Math.max(...miles).toPrecision(3)}mi

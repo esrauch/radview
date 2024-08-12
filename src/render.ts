@@ -66,6 +66,24 @@ export function renderImmediate() {
         }
     }
 
+    const paths = model.paths
+    if (paths) {
+        for (const w of paths) {
+            if (w.seen) {
+                ctx.strokeStyle = '#383'
+            } else {
+                ctx.strokeStyle = '#853'
+            }
+
+            ctx.beginPath()
+            for (const pt of w.nodes) {
+                const mapped = cam.map({ x: DEDISTORT * pt.lon, y: pt.lat })
+                ctx.lineTo(mapped.x, mapped.y)
+            }
+            ctx.stroke()
+        }
+    }
+
     function renderActivity(a: ActivityJson, colorer: Colorer) {
         const pts = a.pts
         for (let i = 1; i < pts.length; ++i) {

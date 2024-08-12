@@ -13,6 +13,13 @@ async function load() {
     }
     const waterWorld = (await waterJsonFile.json()) as World
 
+    // const pathsJsonFile = await fetch('paths_with_seen_json')
+    // if (!pathsJsonFile.ok) {
+    //     alert('failed to open world json')
+    //     throw 'failed to open world json'
+    // }
+    // const pathsWorld = (await pathsJsonFile.json()) as World
+
     const activityJsonFile = await fetch('gpx_json')
     if (!activityJsonFile.ok) {
         alert('failed to open json')
@@ -20,7 +27,7 @@ async function load() {
     }
     const activities = (await activityJsonFile.json()) as ActivityJson[]
 
-    model.init(activities, waterWorld.waters)
+    model.init(activities, waterWorld.waters, []) //pathsWorld.paths)
     initInput()
     model.addListener(render)
     model.cam.addListener(render)

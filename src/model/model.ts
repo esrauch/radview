@@ -4,7 +4,9 @@ import { Listenable } from "../listenable.js"
 import { ColorStrat, Colorer } from "./coloring.js"
 import { min, max } from "../util/util.js"
 import { ActivityJson, activityToString } from "./gpx_json.js"
-import { Water, Way, World } from "./world_json.js"
+import { Water, Way } from "./world_json.js"
+
+export type LatLon = { lat: number, lon: number }
 
 export type CitySelect = 'none' | 'high' | 'clip_somerville' | 'clip_cam'
 

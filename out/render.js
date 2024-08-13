@@ -11,6 +11,14 @@ export function render() {
     renderPending = true;
     requestAnimationFrame(renderImmediate);
 }
+// function cachedPathTrueLatLon(pts: LatLon[]): Path2D {
+//     const cached: Path2D = (pts as any)['path2d']
+//     if (cached) return cached
+//     const p = new Path2D()
+//     for (const pt of pts) {
+//         p.moveTo(DEDISTORT * pt.lon, pt.lat)
+//     }
+// }
 // Forces a synchronous render, should be used rarely and render() preferred
 export function renderImmediate() {
     renderPending = false;
@@ -41,6 +49,9 @@ export function renderImmediate() {
         ctx.fillStyle = '#358';
         ctx.strokeStyle = '#358';
         for (const w of waters) {
+            // const path = cachedPathTrueLatLon(w.bank)
+            // if (w.closed) ctx.fill(path)
+            // else ctx.stroke(path)
             ctx.beginPath();
             for (const pt of w.bank) {
                 const mapped = cam.map({ x: DEDISTORT * pt.lon, y: pt.lat });
@@ -139,10 +150,10 @@ export function renderImmediate() {
     const radius = cam.mapDelta({ x: HOME_PRIVACY_CIRCLE_RADIUS_DEG, y: 0 }).x;
     ctx.fillStyle = '#555';
     ctx.beginPath();
-    //ctx.arc(pt.x, pt.y, radius, 0, 2 * Math.PI)
+    ctx.arc(pt.x, pt.y, radius, 0, 2 * Math.PI);
     ctx.closePath();
     ctx.fill();
-    // const end = performance.now()
-    // console.log('Render time:', end - start)
+    const end = performance.now();
+    console.log('Render time:', end - start);
 }
 window.render = render;

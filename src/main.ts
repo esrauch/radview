@@ -1,6 +1,6 @@
 import { render } from "./render.js"
 import { model } from "./model/model.js"
-import { World } from "./model/world_json.js"
+import { Way, World } from "./model/world_json.js"
 import { initInput } from "./input/input.js"
 import { colorTableParent, trueSizeCanvas } from "./dom.js"
 import { ActivityJson } from "./model/gpx_json.js"
@@ -11,14 +11,15 @@ async function load() {
         alert('failed to open world json')
         throw 'failed to open world json'
     }
-    const waterWorld = (await waterJsonFile.json()) as World
+    const waters = ((await waterJsonFile.json()) as World).waters
 
     // const pathsJsonFile = await fetch('paths_with_seen_json')
     // if (!pathsJsonFile.ok) {
     //     alert('failed to open world json')
     //     throw 'failed to open world json'
     // }
-    // const pathsWorld = (await pathsJsonFile.json()) as World
+    // const paths = ((await pathsJsonFile.json()) as World).paths
+    const paths: Way[] = []
 
     const activityJsonFile = await fetch('gpx_json')
     if (!activityJsonFile.ok) {
@@ -27,7 +28,7 @@ async function load() {
     }
     const activities = (await activityJsonFile.json()) as ActivityJson[]
 
-    model.init(activities, waterWorld.waters, []) //pathsWorld.paths)
+    model.init(activities, waters, paths)
     initInput()
     model.addListener(render)
     model.cam.addListener(render)

@@ -70,9 +70,9 @@ export function renderImmediate() {
     if (paths) {
         for (const w of paths) {
             if (w.seen) {
-                ctx.strokeStyle = '#383'
+                ctx.strokeStyle = '#000'
             } else {
-                ctx.strokeStyle = '#853'
+                ctx.strokeStyle = '#f00'
             }
 
             ctx.beginPath()
@@ -166,7 +166,7 @@ export function renderImmediate() {
     const radius = cam.mapDelta({ x: HOME_PRIVACY_CIRCLE_RADIUS_DEG, y: 0 }).x
     ctx.fillStyle = '#555'
     ctx.beginPath()
-    ctx.arc(pt.x, pt.y, radius, 0, 2 * Math.PI)
+    //ctx.arc(pt.x, pt.y, radius, 0, 2 * Math.PI)
     ctx.closePath()
     ctx.fill()
 

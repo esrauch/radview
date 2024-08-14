@@ -9,7 +9,7 @@ export type Way = {
     name?: string,
     id: number,
     nodes: Node[],
-    seen?: boolean,
+    seen_amount?: number,
 }
 
 export type Water = {

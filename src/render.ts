@@ -80,12 +80,13 @@ export function renderImmediate() {
 
     const paths = model.paths
     if (paths) {
+        ctx.lineWidth = 2
         for (const w of paths) {
-            if (w.seen) {
-                ctx.strokeStyle = '#000'
-            } else {
-                ctx.strokeStyle = '#f00'
-            }
+            const seen = w.seen_amount || 0
+            ctx.strokeStyle =
+                seen < 0.3 ? '#F00' :
+                    seen < 0.6 ? '#F70' :
+                        '#020'
 
             ctx.beginPath()
             for (const pt of w.nodes) {

@@ -76,6 +76,10 @@ export class Colorer extends Listenable {
         this.setStrat(strat)
     }
 
+    isSingleColorForPath() {
+        return this.strat == ColorStrat.WHITE || this.strat == ColorStrat.GRAY
+    }
+
     setStrat(strat: ColorStrat) {
         this.strat = strat
         this.fn = stratImpl[strat]

@@ -1,4 +1,3 @@
-import { Camera } from "./model/camera.js"
 import { DEDISTORT } from "./model/dedistort.js"
 
 export const SOMERVILLE = [

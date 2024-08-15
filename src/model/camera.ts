@@ -1,6 +1,5 @@
 import { canvas } from "../dom.js"
 import { Listenable } from "../listenable.js"
-import { DEDISTORT } from "./dedistort.js"
 
 const MAX_RENDER_SCALE = 2000000
 const MIN_RENDER_SCALE = 500

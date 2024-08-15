@@ -1,8 +1,8 @@
 import { canvas } from "./dom.js"
 import { LatLon, model } from "./model/model.js"
 import { Colorer } from "./model/coloring.js"
-import { cambridge, fillCities, somerville } from "./cities.js"
-import { ActivityJson, DISCONTIGUOUS_MS } from "./model/gpx_json.js"
+import { CAMBRIDGE, cambridge, fillCities, SOMERVILLE, somerville } from "./cities.js"
+import { ActivityJson, DISCONTIGUOUS_MS, PtJson } from "./model/gpx_json.js"
 import { APPROXIMATE_HOME, HOME_PRIVACY_CIRCLE_RADIUS_DEG } from "./model/privacy.js"
 import { DEDISTORT } from "./model/dedistort.js"
 
@@ -14,13 +14,17 @@ export function render() {
     requestAnimationFrame(renderImmediate)
 }
 
-function strokeWithFixedLineWidth(ctx: CanvasRenderingContext2D, path?: Path2D) {
-    const t = ctx.getTransform()
-    ctx.resetTransform()
-    if (path) ctx.stroke(path)
-    else ctx.stroke()
-    ctx.setTransform(t)
+function cachedPathDedistortXY(pts: { x: number, y: number }[]): Path2D {
+    const cached: Path2D = (pts as any)['path2d']
+    if (cached) return cached
+    const p = new Path2D()
+    for (const pt of pts) {
+        p.lineTo(pt.x, pt.y)
+    }
+    (pts as any)['path2d'] = p
+    return p
 }
+
 
 function cachedPathTrueLatLon(pts: LatLon[]): Path2D {
     const cached: Path2D = (pts as any)['path2d']
@@ -28,11 +32,32 @@ function cachedPathTrueLatLon(pts: LatLon[]): Path2D {
     const p = new Path2D()
     for (const pt of pts) {
         p.lineTo(DEDISTORT * pt.lon, pt.lat)
-        // p.lineTo(pt.lon, pt.lat)
     }
     (pts as any)['path2d'] = p
     return p
 }
+
+// Can handle distontiguous
+function cachedPathDedistortPtJson(pts: PtJson[]): Path2D {
+    const cached: Path2D = (pts as any)['path2d']
+    if (cached) return cached
+    const p = new Path2D()
+
+    let last = pts[0]
+    for (const pt of pts) {
+        if (pt.time - last.time > DISCONTIGUOUS_MS)
+            p.moveTo(pt.lon, pt.lat)
+        else
+            p.lineTo(pt.lon, pt.lat)
+        last = pt
+    }
+    (pts as any)['path2d'] = p
+    return p
+}
+
+
+
+
 
 // Forces a synchronous render, should be used rarely and render() preferred
 export function renderImmediate() {
@@ -49,18 +74,22 @@ export function renderImmediate() {
     const cam = model.cam
     cam.applyTransform(ctx)
 
+    const THIN_LINE_WIDTH = cam.mapInverseDelta({ x: 1, y: 0 }).x
+    const MEDIUM_LINE_WIDTH = cam.mapInverseDelta({ x: 2.5, y: 0 }).x
+    const WIDE_LINE_WIDTH = cam.mapInverseDelta({ x: 4, y: 0 }).x
+
     ctx.fillStyle = '#000'
     ctx.beginPath()
     ctx.rect(0, 0, canvasw, canvash)
     ctx.fill()
 
     if (model.citySelect === 'clip_somerville') {
-        somerville(ctx)
-        ctx.clip()
+        // somerville(ctx)
+        ctx.clip(cachedPathDedistortXY(SOMERVILLE))
     }
     if (model.citySelect === 'clip_cam') {
-        cambridge(ctx)
-        ctx.clip()
+        // cambridge(ctx)
+        ctx.clip(cachedPathDedistortXY(CAMBRIDGE))
     }
 
     if (model.citySelect === 'high') {
@@ -75,23 +104,13 @@ export function renderImmediate() {
         for (const w of waters) {
             const path = cachedPathTrueLatLon(w.bank)
             if (w.closed) ctx.fill(path)
-            else strokeWithFixedLineWidth(ctx, path)
-            // ctx.beginPath()
-            // for (const pt of w.bank) {
-            //     ctx.lineTo(DEDISTORT * pt.lon, pt.lat)
-            // }
-
-            // if (w.closed) {
-            //     ctx.fill()
-            // } else {
-            //     strokeWithFixedLineWidth(ctx)
-            // }
+            else ctx.stroke(path)
         }
     }
 
     const paths = model.paths
     if (paths) {
-        ctx.lineWidth = 2
+        ctx.lineWidth = MEDIUM_LINE_WIDTH
         for (const w of paths) {
             const seen = w.seen_amount || 0
             ctx.strokeStyle =
@@ -103,12 +122,25 @@ export function renderImmediate() {
             for (const pt of w.nodes) {
                 ctx.lineTo(DEDISTORT * pt.lon, pt.lat)
             }
-            strokeWithFixedLineWidth(ctx)
+            ctx.stroke()
         }
     }
 
     function renderActivity(a: ActivityJson, colorer: Colorer) {
         const pts = a.pts
+
+        if (pts.length == 0) return
+
+        if (colorer.isSingleColorForPath()) {
+            ctx.strokeStyle = '#fff' //colorer.color(pts[0])
+            ctx.fillStyle = '#fff' //colorer.color(pts[0])
+            ctx.stroke(cachedPathDedistortPtJson(pts))
+            return
+        }
+
+        // If we're a non-fixed color strat we don't use the cache because we have
+        // to break up the line at different points. This could use a color segmented
+        // cache but...
         for (let i = 1; i < pts.length; ++i) {
             const pt = pts[i]
 
@@ -148,13 +180,13 @@ export function renderImmediate() {
                 ctx.lineTo(next.lon, next.lat)
             }
 
-            strokeWithFixedLineWidth(ctx)
+            ctx.stroke()
         }
     }
 
     // First render any of the 'nonactive' ones, but forced light gray
     // then render all of the 'active' ones on top
-    ctx.lineWidth = 1
+    ctx.lineWidth = THIN_LINE_WIDTH
 
     const currentSet = new Set(model.current)
     for (const a of model.activities) {
@@ -162,23 +194,25 @@ export function renderImmediate() {
     }
 
     if (currentSet.size < model.activities.length)
-        ctx.lineWidth = 2.5
+        ctx.lineWidth = MEDIUM_LINE_WIDTH
 
     for (const a of model.current) {
         renderActivity(a, model.colorer)
     }
 
     if (model.citySelect === 'clip_somerville') {
-        ctx.lineWidth = 4
+        ctx.lineWidth = WIDE_LINE_WIDTH
         ctx.strokeStyle = '#FFF'
-        somerville(ctx)
-        strokeWithFixedLineWidth(ctx)
+        // somerville(ctx)
+        // ctx.stroke()
+        ctx.stroke(cachedPathDedistortXY(SOMERVILLE))
     }
     if (model.citySelect === 'clip_cam') {
-        ctx.lineWidth = 4
+        ctx.lineWidth = WIDE_LINE_WIDTH
         ctx.strokeStyle = '#FFF'
-        cambridge(ctx)
-        strokeWithFixedLineWidth(ctx)
+        // cambridge(ctx)
+        // ctx.stroke()
+        ctx.stroke(cachedPathDedistortXY(CAMBRIDGE))
     }
 
     ctx.fillStyle = '#555'

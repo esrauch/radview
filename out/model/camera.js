@@ -9,6 +9,10 @@ export class Camera extends Listenable {
         this.top = 42.341;
         this.right = -52.496;
         this.bottom = 42.436;
+        // left = -71
+        // top = 42.341
+        // right = -72
+        // bottom = 42.436
         this.canvasw = 0;
         this.canvash = 0;
         this.renderscale = 0;
@@ -22,47 +26,27 @@ export class Camera extends Listenable {
         this.fixRenderScale();
     }
     fixRenderScale() {
-        const miny = this.top;
         const minx = this.left;
-        const maxy = this.bottom;
         const maxx = this.right;
-        // The TLBR box is a different aspect ratio than the canvas aspect ratio.
-        // Expanding the camera in one of the two directions while holding the other
-        // one fixed will make the aspect ratios perfectly match.
-        const tl = { x: minx, y: miny };
-        const br = { x: maxx, y: maxy };
-        // First see if fitting the horizontal direction to the canvas would put
-        // the intended top/bottom out of view
         this.renderscale = this.canvasw / (maxx - minx);
         // Just to avoid some enormous jump doing a bad thing, also cap here
         this.renderscale = Math.min(this.renderscale, MAX_RENDER_SCALE);
         this.renderscale = Math.max(this.renderscale, MIN_RENDER_SCALE);
-        const tlmapped = this.map(tl);
-        const brmapped = this.map(br);
-        if (tlmapped.y != this.canvash) {
-            console.error('programmer error, expected that the top.y would be exactly canvas.h', tlmapped.y, this.canvash);
-        }
-        if (brmapped.y < 0) {
-            // If it wouldn't fit that, fit the vertical direction to canvas instead,
-            // which necessary must fit the x direction (we don't need to check)
-            this.renderscale = this.canvash / (maxy - miny);
-        }
         this.triggerListeners();
+    }
+    getTransform() {
+        return new DOMMatrix().
+            scale(this.renderscale, -this.renderscale).
+            translate(-this.left, -this.bottom);
     }
     applyTransform(ctx) {
         ctx.resetTransform();
-        ctx.scale(this.renderscale, -this.renderscale);
-        ctx.translate(-this.left, -this.bottom);
-        // console.log('scale', 1 / this.renderscale)
-        // console.log('translate', this.left, this.top)
-        // const t = ctx.getTransform()
-        // const p = new DOMPoint(-52.5, 42.4)
-        // console.log(t.transformPoint(p))
+        ctx.setTransform(this.getTransform());
     }
     // Maps from lat/long to screen px
     map(pt) {
-        const { x, y } = pt;
-        return { x: this.renderscale * (x - this.left), y: this.canvash - this.renderscale * (y - this.top) };
+        const p = new DOMPoint(pt.x, pt.y);
+        return this.getTransform().transformPoint(p);
     }
     // Maps a lat/long _difference_ to a screen px difference
     mapDelta(pt) {
@@ -70,8 +54,7 @@ export class Camera extends Listenable {
     }
     // Maps from screen px to lat/long
     mapInverse(pt) {
-        const { x, y } = pt;
-        return { x: (x / this.renderscale) + this.left, y: ((this.canvash - y) / this.renderscale) + this.top };
+        return this.getTransform().inverse().transformPoint(pt);
     }
     // Maps a screen px _difference_ to a lat/lon difference
     mapInverseDelta(pt) {

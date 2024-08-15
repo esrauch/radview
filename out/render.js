@@ -11,20 +11,27 @@ export function render() {
     renderPending = true;
     requestAnimationFrame(renderImmediate);
 }
-function strokeWithFixedLineWidth(ctx) {
+function strokeWithFixedLineWidth(ctx, path) {
     const t = ctx.getTransform();
     ctx.resetTransform();
-    ctx.stroke();
+    if (path)
+        ctx.stroke(path);
+    else
+        ctx.stroke();
     ctx.setTransform(t);
 }
-// function cachedPathTrueLatLon(pts: LatLon[]): Path2D {
-//     const cached: Path2D = (pts as any)['path2d']
-//     if (cached) return cached
-//     const p = new Path2D()
-//     for (const pt of pts) {
-//         p.moveTo(DEDISTORT * pt.lon, pt.lat)
-//     }
-// }
+function cachedPathTrueLatLon(pts) {
+    const cached = pts['path2d'];
+    if (cached)
+        return cached;
+    const p = new Path2D();
+    for (const pt of pts) {
+        p.lineTo(DEDISTORT * pt.lon, pt.lat);
+        // p.lineTo(pt.lon, pt.lat)
+    }
+    pts['path2d'] = p;
+    return p;
+}
 // Forces a synchronous render, should be used rarely and render() preferred
 export function renderImmediate() {
     renderPending = false;
@@ -56,19 +63,20 @@ export function renderImmediate() {
         ctx.fillStyle = '#358';
         ctx.strokeStyle = '#358';
         for (const w of waters) {
-            // const path = cachedPathTrueLatLon(w.bank)
-            // if (w.closed) ctx.fill(path)
-            // else ctx.stroke(path)
-            ctx.beginPath();
-            for (const pt of w.bank) {
-                ctx.lineTo(DEDISTORT * pt.lon, pt.lat);
-            }
-            if (w.closed) {
-                ctx.fill();
-            }
-            else {
-                strokeWithFixedLineWidth(ctx);
-            }
+            const path = cachedPathTrueLatLon(w.bank);
+            if (w.closed)
+                ctx.fill(path);
+            else
+                strokeWithFixedLineWidth(ctx, path);
+            // ctx.beginPath()
+            // for (const pt of w.bank) {
+            //     ctx.lineTo(DEDISTORT * pt.lon, pt.lat)
+            // }
+            // if (w.closed) {
+            //     ctx.fill()
+            // } else {
+            //     strokeWithFixedLineWidth(ctx)
+            // }
         }
     }
     const paths = model.paths;

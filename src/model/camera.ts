@@ -62,6 +62,19 @@ export class Camera extends Listenable {
         this.triggerListeners()
     }
 
+    applyTransform(ctx: CanvasRenderingContext2D) {
+        ctx.resetTransform()
+        ctx.scale(this.renderscale, -this.renderscale)
+        ctx.translate(-this.left, -this.bottom)
+
+        // console.log('scale', 1 / this.renderscale)
+        // console.log('translate', this.left, this.top)
+
+        // const t = ctx.getTransform()
+        // const p = new DOMPoint(-52.5, 42.4)
+        // console.log(t.transformPoint(p))
+    }
+
     // Maps from lat/long to screen px
     map(pt: { x: number, y: number }): { x: number, y: number } {
         const { x, y } = pt

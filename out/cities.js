@@ -1289,47 +1289,46 @@ export const BOSTON = [
     { x: -7.119107E+01, y: 4.228232E+01 },
     { x: -7.119126E+01, y: 4.228284E+01 },
 ].map(pt => ({ x: DEDISTORT * pt.x, y: pt.y }));
-export function path(ctx, cam, pts) {
+export function path(ctx, pts) {
     ctx.beginPath();
     for (let i = 0; i < pts.length; ++i) {
         const pt = pts[i];
-        const mapped = cam.map(pt);
-        ctx.lineTo(mapped.x, mapped.y);
+        ctx.lineTo(pt.x, pt.y);
     }
     ctx.closePath();
 }
-export function somerville(ctx, cam) {
-    path(ctx, cam, SOMERVILLE);
+export function somerville(ctx) {
+    path(ctx, SOMERVILLE);
 }
-export function arlington(ctx, cam) {
-    path(ctx, cam, ARLINGTON);
+export function arlington(ctx) {
+    path(ctx, ARLINGTON);
 }
-export function cambridge(ctx, cam) {
-    path(ctx, cam, CAMBRIDGE);
+export function cambridge(ctx) {
+    path(ctx, CAMBRIDGE);
 }
-export function boston(ctx, cam) {
-    path(ctx, cam, BOSTON);
+export function boston(ctx) {
+    path(ctx, BOSTON);
 }
-export function southMedford(ctx, cam) {
-    path(ctx, cam, MEDFORD);
+export function southMedford(ctx) {
+    path(ctx, MEDFORD);
 }
 const RED = 'hsl(0 50% 10%)';
 const YELLOW = 'hsl(50 50% 10%)';
 const GREEN = 'hsl(150 50% 10%)';
 const ORANGE = 'hsl(25 50% 10%)';
-export function fillCities(ctx, cam) {
+export function fillCities(ctx) {
     ctx.fillStyle = YELLOW;
-    cambridge(ctx, cam);
+    cambridge(ctx);
     ctx.fill();
     ctx.fillStyle = GREEN;
-    somerville(ctx, cam);
+    somerville(ctx);
     ctx.fill();
     ctx.fillStyle = ORANGE;
-    boston(ctx, cam);
+    boston(ctx);
     ctx.fill();
-    arlington(ctx, cam);
+    arlington(ctx);
     ctx.fill();
     ctx.fillStyle = RED;
-    southMedford(ctx, cam);
+    southMedford(ctx);
     ctx.fill();
 }

@@ -14,6 +14,13 @@ export function render() {
     requestAnimationFrame(renderImmediate)
 }
 
+function strokeWithFixedLineWidth(ctx: CanvasRenderingContext2D) {
+    const t = ctx.getTransform()
+    ctx.resetTransform()
+    ctx.stroke()
+    ctx.setTransform(t)
+}
+
 // function cachedPathTrueLatLon(pts: LatLon[]): Path2D {
 //     const cached: Path2D = (pts as any)['path2d']
 //     if (cached) return cached
@@ -33,9 +40,10 @@ export function renderImmediate() {
     canvas.width = canvasw
     canvas.height = canvash
 
-    const cam = model.cam
-
     const ctx = canvas.getContext('2d')!
+
+    const cam = model.cam
+    cam.applyTransform(ctx)
 
     ctx.fillStyle = '#000'
     ctx.beginPath()
@@ -43,16 +51,16 @@ export function renderImmediate() {
     ctx.fill()
 
     if (model.citySelect === 'clip_somerville') {
-        somerville(ctx, cam)
+        somerville(ctx)
         ctx.clip()
     }
     if (model.citySelect === 'clip_cam') {
-        cambridge(ctx, cam)
+        cambridge(ctx)
         ctx.clip()
     }
 
     if (model.citySelect === 'high') {
-        fillCities(ctx, cam)
+        fillCities(ctx)
     }
 
     const waters = model.waters
@@ -66,15 +74,14 @@ export function renderImmediate() {
             // else ctx.stroke(path)
             ctx.beginPath()
             for (const pt of w.bank) {
-                const mapped = cam.map({ x: DEDISTORT * pt.lon, y: pt.lat })
-                ctx.lineTo(mapped.x, mapped.y)
+                ctx.lineTo(DEDISTORT * pt.lon, pt.lat)
             }
 
             if (w.closed) {
-                ctx.closePath()
                 ctx.fill()
-            } else
-                ctx.stroke()
+            } else {
+                strokeWithFixedLineWidth(ctx)
+            }
         }
     }
 
@@ -90,10 +97,9 @@ export function renderImmediate() {
 
             ctx.beginPath()
             for (const pt of w.nodes) {
-                const mapped = cam.map({ x: DEDISTORT * pt.lon, y: pt.lat })
-                ctx.lineTo(mapped.x, mapped.y)
+                ctx.lineTo(DEDISTORT * pt.lon, pt.lat)
             }
-            ctx.stroke()
+            strokeWithFixedLineWidth(ctx)
         }
     }
 
@@ -107,12 +113,10 @@ export function renderImmediate() {
             ctx.beginPath()
             {
                 const prev = pts[i - 1]
-                const { x, y } = cam.map({ x: prev.lon, y: prev.lat })
-                ctx.moveTo(x, y)
+                ctx.moveTo(prev.lon, prev.lat)
             }
 
-            const { x, y } = cam.map({ x: pt.lon, y: pt.lat })
-            ctx.lineTo(x, y)
+            ctx.lineTo(pt.lon, pt.lat)
 
 
             let last_t = +pt.time
@@ -137,11 +141,10 @@ export function renderImmediate() {
 
                 i++
 
-                const { x, y } = cam.map({ x: next.lon, y: next.lat })
-                ctx.lineTo(x, y)
+                ctx.lineTo(next.lon, next.lat)
             }
 
-            ctx.stroke()
+            strokeWithFixedLineWidth(ctx)
         }
     }
 
@@ -164,22 +167,19 @@ export function renderImmediate() {
     if (model.citySelect === 'clip_somerville') {
         ctx.lineWidth = 4
         ctx.strokeStyle = '#FFF'
-        somerville(ctx, cam)
-        ctx.stroke()
+        somerville(ctx)
+        strokeWithFixedLineWidth(ctx)
     }
     if (model.citySelect === 'clip_cam') {
         ctx.lineWidth = 4
         ctx.strokeStyle = '#FFF'
-        cambridge(ctx, cam)
-        ctx.stroke()
+        cambridge(ctx)
+        strokeWithFixedLineWidth(ctx)
     }
 
-
-    const pt = cam.map({ x: APPROXIMATE_HOME.lon, y: APPROXIMATE_HOME.lat })
-    const radius = cam.mapDelta({ x: HOME_PRIVACY_CIRCLE_RADIUS_DEG, y: 0 }).x
     ctx.fillStyle = '#555'
     ctx.beginPath()
-    ctx.arc(pt.x, pt.y, radius, 0, 2 * Math.PI)
+    ctx.arc(APPROXIMATE_HOME.lon, APPROXIMATE_HOME.lat, HOME_PRIVACY_CIRCLE_RADIUS_DEG, 0, 2 * Math.PI)
     ctx.closePath()
     ctx.fill()
 

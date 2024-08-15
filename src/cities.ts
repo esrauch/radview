@@ -1297,36 +1297,35 @@ export const BOSTON = [
     { x: -7.119126E+01, y: 4.228284E+01 },
 ].map(pt => ({ x: DEDISTORT * pt.x, y: pt.y }))
 
-export function path(ctx: CanvasRenderingContext2D, cam: Camera, pts: Array<{ x: number, y: number }>) {
+export function path(ctx: CanvasRenderingContext2D, pts: Array<{ x: number, y: number }>) {
     ctx.beginPath()
     for (let i = 0; i < pts.length; ++i) {
         const pt = pts[i]
-        const mapped = cam.map(pt)
-        ctx.lineTo(mapped.x, mapped.y)
+        ctx.lineTo(pt.x, pt.y)
     }
     ctx.closePath()
 }
 
 
-export function somerville(ctx: CanvasRenderingContext2D, cam: Camera) {
-    path(ctx, cam, SOMERVILLE)
+export function somerville(ctx: CanvasRenderingContext2D) {
+    path(ctx, SOMERVILLE)
 }
 
-export function arlington(ctx: CanvasRenderingContext2D, cam: Camera) {
-    path(ctx, cam, ARLINGTON)
+export function arlington(ctx: CanvasRenderingContext2D) {
+    path(ctx, ARLINGTON)
 }
 
 
-export function cambridge(ctx: CanvasRenderingContext2D, cam: Camera) {
-    path(ctx, cam, CAMBRIDGE)
+export function cambridge(ctx: CanvasRenderingContext2D) {
+    path(ctx, CAMBRIDGE)
 }
 
-export function boston(ctx: CanvasRenderingContext2D, cam: Camera) {
-    path(ctx, cam, BOSTON)
+export function boston(ctx: CanvasRenderingContext2D) {
+    path(ctx, BOSTON)
 }
 
-export function southMedford(ctx: CanvasRenderingContext2D, cam: Camera) {
-    path(ctx, cam, MEDFORD)
+export function southMedford(ctx: CanvasRenderingContext2D) {
+    path(ctx, MEDFORD)
 }
 
 const RED = 'hsl(0 50% 10%)'
@@ -1334,23 +1333,23 @@ const YELLOW = 'hsl(50 50% 10%)'
 const GREEN = 'hsl(150 50% 10%)'
 const ORANGE = 'hsl(25 50% 10%)'
 
-export function fillCities(ctx: CanvasRenderingContext2D, cam: Camera) {
+export function fillCities(ctx: CanvasRenderingContext2D) {
     ctx.fillStyle = YELLOW
-    cambridge(ctx, cam)
+    cambridge(ctx)
     ctx.fill()
 
     ctx.fillStyle = GREEN
-    somerville(ctx, cam)
+    somerville(ctx)
     ctx.fill()
 
     ctx.fillStyle = ORANGE
-    boston(ctx, cam)
+    boston(ctx)
     ctx.fill()
 
-    arlington(ctx, cam)
+    arlington(ctx)
     ctx.fill()
 
     ctx.fillStyle = RED
-    southMedford(ctx, cam)
+    southMedford(ctx)
     ctx.fill()
 }

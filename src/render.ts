@@ -1,7 +1,7 @@
 import { canvas } from "./dom.js"
 import { LatLon, model } from "./model/model.js"
 import { Colorer } from "./model/coloring.js"
-import { CAMBRIDGE, cambridge, fillCities, SOMERVILLE, somerville } from "./cities.js"
+import { ARLINGTON, BOSTON, CAMBRIDGE, MEDFORD, SOMERVILLE } from "./cities.js"
 import { ActivityJson, DISCONTIGUOUS_MS, PtJson } from "./model/gpx_json.js"
 import { APPROXIMATE_HOME, HOME_PRIVACY_CIRCLE_RADIUS_DEG } from "./model/privacy.js"
 import { DEDISTORT } from "./model/dedistort.js"
@@ -84,16 +84,31 @@ export function renderImmediate() {
     ctx.fill()
 
     if (model.citySelect === 'clip_somerville') {
-        // somerville(ctx)
         ctx.clip(cachedPathDedistortXY(SOMERVILLE))
     }
     if (model.citySelect === 'clip_cam') {
-        // cambridge(ctx)
         ctx.clip(cachedPathDedistortXY(CAMBRIDGE))
     }
 
     if (model.citySelect === 'high') {
-        fillCities(ctx)
+        const RED = 'hsl(0 50% 10%)'
+        const YELLOW = 'hsl(50 50% 10%)'
+        const GREEN = 'hsl(150 50% 10%)'
+        const ORANGE = 'hsl(25 50% 10%)'
+
+        ctx.fillStyle = YELLOW
+        ctx.fill(cachedPathDedistortXY(CAMBRIDGE))
+
+        ctx.fillStyle = GREEN
+        ctx.fill(cachedPathDedistortXY(SOMERVILLE))
+
+        ctx.fillStyle = ORANGE
+        ctx.fill(cachedPathDedistortXY(BOSTON))
+
+        ctx.fill(cachedPathDedistortXY(ARLINGTON))
+
+        ctx.fillStyle = RED
+        ctx.fill(cachedPathDedistortXY(MEDFORD))
     }
 
     const waters = model.waters
@@ -203,15 +218,11 @@ export function renderImmediate() {
     if (model.citySelect === 'clip_somerville') {
         ctx.lineWidth = WIDE_LINE_WIDTH
         ctx.strokeStyle = '#FFF'
-        // somerville(ctx)
-        // ctx.stroke()
         ctx.stroke(cachedPathDedistortXY(SOMERVILLE))
     }
     if (model.citySelect === 'clip_cam') {
         ctx.lineWidth = WIDE_LINE_WIDTH
         ctx.strokeStyle = '#FFF'
-        // cambridge(ctx)
-        // ctx.stroke()
         ctx.stroke(cachedPathDedistortXY(CAMBRIDGE))
     }
 

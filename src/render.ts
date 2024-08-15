@@ -56,9 +56,6 @@ function cachedPathDedistortPtJson(pts: PtJson[]): Path2D {
 }
 
 
-
-
-
 // Forces a synchronous render, should be used rarely and render() preferred
 export function renderImmediate() {
     renderPending = false

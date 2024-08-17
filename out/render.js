@@ -58,16 +58,16 @@ export function renderImmediate() {
     const canvash = canvas.height;
     canvas.width = canvasw;
     canvas.height = canvash;
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext('2d', { 'alpha': false });
+    ctx.fillStyle = '#000';
+    ctx.beginPath();
+    ctx.rect(0, 0, canvasw, canvash);
+    ctx.fill();
     const cam = model.cam;
     cam.applyTransform(ctx);
     const THIN_LINE_WIDTH = cam.mapInverseDelta({ x: 1, y: 0 }).x;
     const MEDIUM_LINE_WIDTH = cam.mapInverseDelta({ x: 2.5, y: 0 }).x;
     const WIDE_LINE_WIDTH = cam.mapInverseDelta({ x: 4, y: 0 }).x;
-    ctx.fillStyle = '#000';
-    ctx.beginPath();
-    ctx.rect(0, 0, canvasw, canvash);
-    ctx.fill();
     if (model.citySelect === 'clip_somerville') {
         ctx.clip(cachedPathDedistortXY(SOMERVILLE));
     }

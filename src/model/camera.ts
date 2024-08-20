@@ -1,8 +1,8 @@
 import { canvas } from "../dom.js"
 import { Listenable } from "../listenable.js"
 
-const MAX_RENDER_SCALE = 100000
-const MIN_RENDER_SCALE = 500
+const MAX_RENDER_SCALE = 50000
+const MIN_RENDER_SCALE = 4000
 
 
 export class Camera extends Listenable {

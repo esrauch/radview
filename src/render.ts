@@ -77,8 +77,8 @@ export function renderImmediate() {
     cam.applyTransform(ctx)
 
     const THIN_LINE_WIDTH = cam.mapInverseDelta({ x: 1, y: 0 }).x
-    const MEDIUM_LINE_WIDTH = cam.mapInverseDelta({ x: 2.5, y: 0 }).x
-    const WIDE_LINE_WIDTH = cam.mapInverseDelta({ x: 4, y: 0 }).x
+    const MEDIUM_LINE_WIDTH = cam.mapInverseDelta({ x: 3, y: 0 }).x
+    const WIDE_LINE_WIDTH = cam.mapInverseDelta({ x: 5, y: 0 }).x
 
     if (model.citySelect === 'clip_somerville') {
         ctx.clip(cachedPathDedistortXY(SOMERVILLE))
@@ -144,8 +144,7 @@ export function renderImmediate() {
         if (pts.length == 0) return
 
         if (colorer.isSingleColorForPath()) {
-            ctx.strokeStyle = '#fff' //colorer.color(pts[0])
-            ctx.fillStyle = '#fff' //colorer.color(pts[0])
+            ctx.strokeStyle = colorer.color(pts[0])
             ctx.stroke(cachedPathDedistortPtJson(pts))
             return
         }

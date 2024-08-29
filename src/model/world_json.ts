@@ -1,15 +1,23 @@
-
+export type AABB = {
+    minlat: number,
+    maxlat: number,
+    minlon: number,
+    maxlon: number,
+}
 
 export type Node = {
     lat: number,
-    lon: number
+    lon: number,
+    num_rides?: number,
 }
 
 export type Way = {
     name?: string,
     id: number,
     nodes: Node[],
-    seen_amount?: number,
+    seen_percent?: number,
+    num_rides?: number,
+    bb: AABB,
 }
 
 export type Water = {
@@ -17,6 +25,7 @@ export type Water = {
     id: number,
     bank: Node[],
     closed: boolean,
+    bb: AABB,
 }
 
 export type World = {

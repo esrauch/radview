@@ -52,6 +52,7 @@ function cachedPathDedistortPtJson(pts) {
 }
 // Forces a synchronous render, should be used rarely and render() preferred
 export function renderImmediate() {
+    var _a;
     renderPending = false;
     const start = performance.now();
     const canvasw = canvas.width;
@@ -103,18 +104,27 @@ export function renderImmediate() {
     }
     const paths = model.paths;
     if (paths) {
-        ctx.lineWidth = MEDIUM_LINE_WIDTH;
+        ctx.lineWidth = THIN_LINE_WIDTH;
+        let lastStrokeStyle = '';
         for (const w of paths) {
-            const seen = w.seen_amount || 0;
-            ctx.strokeStyle =
-                seen < 0.3 ? '#F00' :
-                    seen < 0.6 ? '#F70' :
-                        '#020';
-            ctx.beginPath();
-            for (const pt of w.nodes) {
-                ctx.lineTo(DEDISTORT * pt.lon, pt.lat);
-            }
-            ctx.stroke();
+            /*
+            const seen = w.num_rides || 0
+            const color = new Map<number, string>([
+                [0, '#700'],
+                [1, '#338'],
+                [2, '#559'],
+                [3, '#77a'],
+                [4, '#9aa'],
+                [5, '#3c3'],
+            ])
+            const next = color.get(Math.round(seen)) || '#0F0'
+            */
+            const seen = (_a = w.seen_percent) !== null && _a !== void 0 ? _a : 0;
+            const next = seen > 0.7 ? '#090' :
+                seen > 0.5 ? '#990' : '#900';
+            if (next != lastStrokeStyle)
+                lastStrokeStyle = ctx.strokeStyle = next;
+            ctx.stroke(cachedPathTrueLatLon(w.nodes));
         }
     }
     function renderActivity(a, colorer) {
@@ -166,15 +176,18 @@ export function renderImmediate() {
     // First render any of the 'nonactive' ones, but forced light gray
     // then render all of the 'active' ones on top
     ctx.lineWidth = THIN_LINE_WIDTH;
-    const currentSet = new Set(model.current);
-    for (const a of model.activities) {
-        if (!currentSet.has(a))
-            renderActivity(a, model.deselectedColorer);
-    }
-    if (currentSet.size < model.activities.length)
-        ctx.lineWidth = MEDIUM_LINE_WIDTH;
-    for (const a of model.current) {
-        renderActivity(a, model.colorer);
+    const RENDER_ACTIVITIES = true;
+    if (RENDER_ACTIVITIES) {
+        const currentSet = new Set(model.current);
+        for (const a of model.activities) {
+            if (!currentSet.has(a))
+                renderActivity(a, model.deselectedColorer);
+        }
+        if (currentSet.size < model.activities.length)
+            ctx.lineWidth = MEDIUM_LINE_WIDTH;
+        for (const a of model.current) {
+            renderActivity(a, model.colorer);
+        }
     }
     if (model.citySelect === 'clip_somerville') {
         ctx.lineWidth = WIDE_LINE_WIDTH;

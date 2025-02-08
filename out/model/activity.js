@@ -1,11 +1,5 @@
 import { durationSToHHMMSS } from "../util/time.js";
 import { ColorStrat } from "./coloring.js";
-export function getLatLngs(a) {
-    const lls = a.streams.find(s => s.type == 'latlng');
-    if (!lls)
-        throw 'Missing latlng??';
-    return lls.data;
-}
 export function getHumanDate(a) {
     return new Date(a.date).toLocaleDateString(undefined, {
         month: "short",

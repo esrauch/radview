@@ -3,7 +3,7 @@ import { LatLon, LatLonCompact, model } from "./model/model.js"
 import { Colorer } from "./model/coloring.js"
 import { ARLINGTON, BOSTON, CAMBRIDGE, MEDFORD, SOMERVILLE } from "./cities.js"
 import { DEDISTORT } from "./model/dedistort.js"
-import { CompactActivity, getLatLngs } from "./model/activity.js"
+import { CompactActivity } from "./model/activity.js"
 
 
 let renderPending = false
@@ -145,7 +145,7 @@ export function renderImmediate() {
     }
 
     function renderActivity(a: CompactActivity, colorer: Colorer) {
-        const pts = getLatLngs(a)
+        const pts = a.latlngs
 
         if (pts.length == 0) return
 

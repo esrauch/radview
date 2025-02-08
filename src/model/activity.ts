@@ -3,6 +3,8 @@ import { ColorStrat } from "./coloring.js"
 
 export type CompactActivityFile = CompactActivity[]
 
+export type LatLngCompact = [number, number]
+
 export type CompactActivity = {
     id: number,
     name: string,
@@ -13,13 +15,16 @@ export type CompactActivity = {
     max_speed_mph: number,
     average_heartrate?: number,
     max_heartrate?: number,
+
+    // These are all parallel arrays
+    times: number[],
+    latlngs: LatLngCompact[],
     streams: Stream[]
 }
 
-export function getLatLngs(a: CompactActivity): LatLngCompact[] {
-    const lls = a.streams.find(s => s.type == 'latlng')
-    if (!lls) throw 'Missing latlng??'
-    return lls.data
+export type Stream = {
+    type: 'heartrate' | 'mph' | 'grade_pct' | 'elevation_meters' | 'miles',
+    data: number[],
 }
 
 export function getHumanDate(a: CompactActivity): string {
@@ -49,16 +54,3 @@ export function eligibleForColoring(a: CompactActivity, strat: ColorStrat): bool
     return a.streams.find(s => s.type == 'heartrate') != null
 }
 
-export type LatLngCompact = [number, number]
-
-export type Stream = LatLngs | NumericStream;
-
-export type LatLngs = {
-    type: 'latlng',
-    data: Array<LatLngCompact>
-};
-
-export type NumericStream = {
-    type: 'time' | 'heartrate' | 'mph' | 'grade_pct' | 'elevation_meters' | 'miles',
-    data: number[],
-}

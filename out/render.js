@@ -2,7 +2,6 @@ import { canvas } from "./dom.js";
 import { model } from "./model/model.js";
 import { ARLINGTON, BOSTON, CAMBRIDGE, MEDFORD, SOMERVILLE } from "./cities.js";
 import { DEDISTORT } from "./model/dedistort.js";
-import { getLatLngs } from "./model/activity.js";
 let renderPending = false;
 export function render() {
     if (renderPending)
@@ -127,7 +126,7 @@ export function renderImmediate() {
         }
     }
     function renderActivity(a, colorer) {
-        const pts = getLatLngs(a);
+        const pts = a.latlngs;
         if (pts.length == 0)
             return;
         colorer.activateActivity(a);

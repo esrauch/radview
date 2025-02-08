@@ -52,16 +52,6 @@ const zoneRgbs = {
     5: '#f33',
     6: '#ff028d'
 };
-const gradeRgbs = {
-    NaN: '#555',
-    0: '#77b',
-    1: '#9bb',
-    2: '#575',
-    3: '#755',
-    4: '#f77',
-    5: '#f33',
-    6: '#ff028d'
-};
 const stratImpl = {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     [ColorStrat.WHITE]: (_) => '#fff',

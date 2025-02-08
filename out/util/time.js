@@ -1,5 +1,7 @@
-export function durationMsToHHMMSS(d) {
-    const s = d / 1000;
+export function durationMsToHHMMSS(ms) {
+    return durationSToHHMMSS(ms / 1000);
+}
+export function durationSToHHMMSS(s) {
     let secs = Math.floor(s % 60).toString();
     let minutes = Math.floor((s / 60) % 60).toString();
     const hours = Math.floor(s / 3600).toString();

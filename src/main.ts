@@ -3,7 +3,8 @@ import { model } from "./model/model.js"
 import { Way, World } from "./model/world_json.js"
 import { initInput } from "./input/input.js"
 import { colorTableParent, trueSizeCanvas } from "./dom.js"
-import { ActivityJson } from "./model/gpx_json.js"
+import { CompactActivity } from "./model/activity.js"
+
 
 async function load() {
     const waterJsonFile = await fetch('water_json')
@@ -21,12 +22,12 @@ async function load() {
     // const paths = ((await pathsJsonFile.json()) as World).paths
     const paths: Way[] = []
 
-    const activityJsonFile = await fetch('gpx_json')
+    const activityJsonFile = await fetch('rides_json')
     if (!activityJsonFile.ok) {
         alert('failed to open json')
         throw ('failed to open json')
     }
-    const activities = (await activityJsonFile.json()) as ActivityJson[]
+    const activities = (await activityJsonFile.json()) as CompactActivity[]
 
     model.init(activities, waters, paths)
     initInput()

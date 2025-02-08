@@ -19,34 +19,16 @@ export const APPROXIMATE_HOME = {
 
 export const HOME_PRIVACY_CIRCLE_RADIUS_DEG = 0.0015
 
-export type PtJson = {
-    lat: number,
-    lon: number,
-    time: number,  // ms since 1970, aka +Date()
-    ele: number,   // meters above sea-level
-    mph: number,
-    hr?: number,
-}
+// export function activityToString(a: ActivityJson): string {
+//     const pts = a.pts
+//     const hrs = pts.map(pt => pt.hr || 0)
+//     const maxHr = Math.max(...hrs)
 
-export type ActivityJson = {
-    date: number,  // ms since 1970, aka +Date()
-    name: string,
-    type: string,  // 'cycling'
-    miles: number,
-    movingTimeMs: number,
-    pts: PtJson[],
-}
+//     const durationMs = pts[pts.length - 1].time - pts[0].time
 
-export function activityToString(a: ActivityJson): string {
-    const pts = a.pts
-    const hrs = pts.map(pt => pt.hr || 0)
-    const maxHr = Math.max(...hrs)
-
-    const durationMs = pts[pts.length - 1].time - pts[0].time
-
-    return `Dist: ${a.miles.toPrecision(3)}mi
-       Moving Time: ${durationMsToHHMMSS(a.movingTimeMs)}
-       Total Time: ${durationMsToHHMMSS(durationMs)}
-       Max HR: ${maxHr == 0 ? "Not recorded" : maxHr}
-    `
-}
+//     return `Dist: ${a.miles.toPrecision(3)}mi
+//        Moving Time: ${durationMsToHHMMSS(a.movingTimeMs)}
+//        Total Time: ${durationMsToHHMMSS(durationMs)}
+//        Max HR: ${maxHr == 0 ? "Not recorded" : maxHr}
+//     `
+// }

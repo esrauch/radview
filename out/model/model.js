@@ -3,7 +3,7 @@ import { desc } from "../dom.js";
 import { Listenable } from "../listenable.js";
 import { ColorStrat, Colorer } from "./coloring.js";
 import { min, max } from "../util/util.js";
-import { activityToString } from "./gpx_json.js";
+import { activityToString } from "./activity.js";
 class Model extends Listenable {
     constructor() {
         super(...arguments);
@@ -23,15 +23,16 @@ class Model extends Listenable {
         this.waters = waters;
         this.paths = paths;
         const miles = activities.map(a => a.miles);
-        this.desc = `Shortest trip: ${Math.min(...miles).toPrecision(3)}mi
+        this.desc = `
+            Shortest trip: ${Math.min(...miles).toPrecision(3)}mi
             Longest trip: ${Math.max(...miles).toPrecision(3)}mi
             Total dist: ${miles.reduce((prev, curr) => prev + curr, 0).toPrecision(3)} mi
         `;
-        const flat = activities.map((a) => a.pts).flat();
-        const minx = min(flat.map((pt) => pt.lon));
-        const maxx = max(flat.map((pt) => pt.lon));
-        const miny = min(flat.map((pt) => pt.lat));
-        const maxy = max(flat.map((pt) => pt.lat));
+        const flat = activities.map((a) => a.streams.find(s => s.type == 'latlng').data).flat();
+        const minx = min(flat.map((pt) => pt[1]));
+        const maxx = max(flat.map((pt) => pt[1]));
+        const miny = min(flat.map((pt) => pt[0]));
+        const maxy = max(flat.map((pt) => pt[0]));
         console.log(`Init saw box of = [${miny}, ${minx}, ${maxy}, ${maxx}]`);
         console.log(`Bounding box size is ${((maxy - miny) * 69).toPrecision(3)}mi North-South and ${((maxx - minx) * 69).toPrecision(3)}mi East-West`);
         this.colorer.addListener(this.trigger);

@@ -1,10 +1,10 @@
 import { canvas } from "./dom.js"
-import { LatLon, model } from "./model/model.js"
+import { LatLon, LatLonCompact, model } from "./model/model.js"
 import { Colorer } from "./model/coloring.js"
 import { ARLINGTON, BOSTON, CAMBRIDGE, MEDFORD, SOMERVILLE } from "./cities.js"
-import { ActivityJson, DISCONTIGUOUS_MS, PtJson } from "./model/gpx_json.js"
-import { APPROXIMATE_HOME, HOME_PRIVACY_CIRCLE_RADIUS_DEG } from "./model/privacy.js"
+import { DISCONTIGUOUS_MS } from "./model/gpx_json.js"
 import { DEDISTORT } from "./model/dedistort.js"
+import { CompactActivity, getLatLngs } from "./model/activity.js"
 
 
 let renderPending = false
@@ -37,19 +37,19 @@ function cachedPathTrueLatLon(pts: LatLon[]): Path2D {
     return p
 }
 
-// Can handle distontiguous
-function cachedPathDedistortPtJson(pts: PtJson[]): Path2D {
+// Can handle discontiguous
+function cachedPathDedistortPtJson(pts: LatLonCompact[]): Path2D {
     const cached: Path2D = (pts as any)['path2d']
     if (cached) return cached
     const p = new Path2D()
 
-    let last = pts[0]
+    // let last = pts[0]
     for (const pt of pts) {
-        if (pt.time - last.time > DISCONTIGUOUS_MS)
-            p.moveTo(pt.lon, pt.lat)
-        else
-            p.lineTo(pt.lon, pt.lat)
-        last = pt
+        // if (pt.time - last.time > DISCONTIGUOUS_MS)
+        // p.moveTo(pt.lon, pt.lat)
+        // else
+        p.lineTo(DEDISTORT * pt[1], pt[0])
+        // last = pt
     }
     (pts as any)['path2d'] = p
     return p
@@ -145,13 +145,16 @@ export function renderImmediate() {
         }
     }
 
-    function renderActivity(a: ActivityJson, colorer: Colorer) {
-        const pts = a.pts
+    function renderActivity(a: CompactActivity, colorer: Colorer) {
+        const pts = getLatLngs(a)
 
         if (pts.length == 0) return
 
-        if (colorer.isSingleColorForPath()) {
-            ctx.strokeStyle = colorer.color(pts[0])
+        colorer.activateActivity(a)
+
+        const fixedColor = colorer.fixedColor()
+        if (fixedColor) {
+            ctx.strokeStyle = fixedColor
             ctx.stroke(cachedPathDedistortPtJson(pts))
             return
         }
@@ -162,18 +165,18 @@ export function renderImmediate() {
         for (let i = 1; i < pts.length; ++i) {
             const pt = pts[i]
 
-            const strokeStyle = colorer.color(pt)
+            const strokeStyle = colorer.color(i)
+            const strokeStyleIdx = i
             ctx.strokeStyle = strokeStyle
             ctx.beginPath()
             {
                 const prev = pts[i - 1]
-                ctx.moveTo(prev.lon, prev.lat)
+                ctx.moveTo(DEDISTORT * prev[1], prev[0])
             }
 
-            ctx.lineTo(pt.lon, pt.lat)
+            ctx.lineTo(DEDISTORT * pt[1], pt[0])
 
-
-            let last_t = +pt.time
+            // let last_t = +pt.time
             // Add points to the same line as long as strokestyle
             // of the next point is the same. 
             // eslint-disable-next-line no-constant-condition
@@ -181,21 +184,22 @@ export function renderImmediate() {
                 const next = pts[i + 1]
                 if (!next) break
 
-                const next_t = +next.time
-                const delta = next_t - last_t
-                last_t = next_t
+                // const next_t = +next.time
+                // const delta = next_t - last_t
+                // last_t = next_t
 
-                // Don't draw lines between points where gps was off.
-                if (delta > DISCONTIGUOUS_MS) {
-                    i++
-                    break
-                }
+                // // Don't draw lines between points where gps was off.
+                // if (delta > DISCONTIGUOUS_MS) {
+                //     i++
+                //     break
+                // }
 
-                if (colorer.color(next) != strokeStyle) break
+                // Only change colors at most once per 20 points
+                if ((i - strokeStyleIdx > 20) && colorer.color(i + 1) != strokeStyle) break
 
                 i++
 
-                ctx.lineTo(next.lon, next.lat)
+                ctx.lineTo(DEDISTORT * next[1], next[0])
             }
 
             ctx.stroke()
@@ -232,12 +236,6 @@ export function renderImmediate() {
         ctx.strokeStyle = '#FFF'
         ctx.stroke(cachedPathDedistortXY(CAMBRIDGE))
     }
-
-    ctx.fillStyle = '#555'
-    ctx.beginPath()
-    ctx.arc(APPROXIMATE_HOME.lon, APPROXIMATE_HOME.lat, HOME_PRIVACY_CIRCLE_RADIUS_DEG, 0, 2 * Math.PI)
-    ctx.closePath()
-    ctx.fill()
 
     const end = performance.now()
     console.log('Render time:', end - start)

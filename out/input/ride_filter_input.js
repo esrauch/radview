@@ -1,4 +1,5 @@
 import { rideFilterSelect } from "../dom.js";
+import { getHumanDate } from "../model/activity.js";
 import { model } from "../model/model.js";
 function createOption(label, value) {
     const el = document.createElement('option');
@@ -8,7 +9,7 @@ function createOption(label, value) {
 }
 export function initRideFilter() {
     const sel = rideFilterSelect;
-    const options = model.activities.map((a, index) => createOption(a.name, index));
+    const options = model.activities.map((a, index) => createOption('[' + getHumanDate(a) + '] ' + a.name, index));
     options.reverse();
     options.forEach(opt => sel.add(opt));
     sel.addEventListener('change', onChange);

@@ -9,8 +9,3 @@ export const APPROXIMATE_HOME = {
     lat: 42.39951613195809
 };
 export const HOME_PRIVACY_CIRCLE_RADIUS_DEG = 0.0015;
-export function closeToHome(pt) {
-    const dlon = pt.lon - APPROXIMATE_HOME.lon;
-    const dlat = pt.lat - APPROXIMATE_HOME.lat;
-    return Math.sqrt(dlon * dlon + dlat * dlat) < HOME_PRIVACY_CIRCLE_RADIUS_DEG;
-}

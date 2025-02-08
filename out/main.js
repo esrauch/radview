@@ -26,7 +26,7 @@ function load() {
         // }
         // const paths = ((await pathsJsonFile.json()) as World).paths
         const paths = [];
-        const activityJsonFile = yield fetch('gpx_json');
+        const activityJsonFile = yield fetch('rides_json');
         if (!activityJsonFile.ok) {
             alert('failed to open json');
             throw ('failed to open json');

@@ -27,12 +27,12 @@ const hrThresholds = [
     HR_MAX, // 5  (anything higher will be 6
 ];
 const mphThresholds = [
-    6, // 0
-    9, // 1
-    11, // 2
-    13, // 3
-    16, // 4
-    20, // 5 (anything higher will be 6
+    4, // 0
+    8, // 1
+    12, // 2
+    16, // 3
+    20, // 4
+    24, // 5 (anything higher will be 6
 ];
 const eleThresholds = [
     5, // 0
@@ -54,12 +54,12 @@ const zoneRgbs = {
 };
 const stratImpl = {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    [ColorStrat.WHITE]: (_pt) => '#fff',
-    [ColorStrat.HR]: (pt) => zoneRgbs[zone(pt.hr, hrThresholds)],
-    [ColorStrat.SPEED]: (pt) => zoneRgbs[zone(pt.mph, mphThresholds)],
-    [ColorStrat.ELEVATION]: (pt) => zoneRgbs[zone(pt.ele, eleThresholds)],
+    [ColorStrat.WHITE]: (_) => '#fff',
+    [ColorStrat.HR]: (hr) => zoneRgbs[zone(hr, hrThresholds)],
+    [ColorStrat.SPEED]: (mph) => zoneRgbs[zone(mph, mphThresholds)],
+    [ColorStrat.ELEVATION]: (ele) => zoneRgbs[zone(ele, eleThresholds)],
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    [ColorStrat.GRAY]: (_pt) => '#373737',
+    [ColorStrat.GRAY]: (_) => '#373737',
 };
 export class Colorer extends Listenable {
     constructor(strat) {
@@ -68,16 +68,45 @@ export class Colorer extends Listenable {
         this.fn = stratImpl[ColorStrat.WHITE];
         this.setStrat(strat);
     }
-    isSingleColorForPath() {
-        return this.strat == ColorStrat.WHITE || this.strat == ColorStrat.GRAY;
+    refreshStream() {
+        const a = this.activity;
+        if (!a)
+            return;
+        const streamNameMap = {
+            [ColorStrat.HR]: 'heartrate',
+            [ColorStrat.SPEED]: 'mph',
+            [ColorStrat.ELEVATION]: 'elevation_meters',
+            [ColorStrat.GRAY]: undefined,
+            [ColorStrat.WHITE]: undefined
+        };
+        const streamName = streamNameMap[this.strat];
+        if (!streamName)
+            return;
+        const stream = a.streams.find(s => s.type == streamName);
+        this.stream = stream === null || stream === void 0 ? void 0 : stream.data;
     }
     setStrat(strat) {
         this.strat = strat;
         this.fn = stratImpl[strat];
+        this.refreshStream();
         this.triggerListeners();
     }
-    color(pt) {
-        return this.fn(pt);
+    activateActivity(a) {
+        this.activity = a;
+        this.refreshStream();
+    }
+    fixedColor() {
+        if (this.strat == ColorStrat.WHITE)
+            return '#FFF';
+        if (this.strat == ColorStrat.GRAY)
+            return '#373737';
+        if (!this.stream)
+            return 'rgba(0,0,0,0)';
+    }
+    color(idx) {
+        if (!this.activity || !this.stream)
+            throw `did not activate activity first`;
+        return this.fn(this.stream[idx]);
     }
     coloringTableHtml() {
         const strat = this.strat;

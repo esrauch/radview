@@ -47,7 +47,6 @@ export function activityToString(a: CompactActivity): string {
 
 export type LatLngCompact = [number, number]
 
-
 export type Stream = LatLngs | NumericStream;
 
 export type LatLngs = {

@@ -167,8 +167,8 @@ export function renderImmediate() {
                 //     i++
                 //     break
                 // }
-                // Only change colors at most once per 20 points
-                if ((i - strokeStyleIdx > 20) && colorer.color(i + 1) != strokeStyle)
+                // Only change colors at most once per 10 points
+                if ((i - strokeStyleIdx > 10) && colorer.color(i + 1) != strokeStyle)
                     break;
                 i++;
                 ctx.lineTo(DEDISTORT * next[1], next[0]);

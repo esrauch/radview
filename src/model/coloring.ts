@@ -1,6 +1,6 @@
 
 import { Listenable } from "../listenable.js"
-import { CompactActivity, Stream } from "./activity.js"
+import { CompactActivity } from "./activity.js"
 
 export enum ColorStrat {
     WHITE,
@@ -35,7 +35,7 @@ const mphThresholds = [
     12, // 2
     16, // 3
     20, // 4
-    24, // 5 (anything higher will be 6
+    24, // 5 (anything higher will be 6)
 ]
 
 const eleThresholds = [
@@ -44,7 +44,7 @@ const eleThresholds = [
     15, // 2
     20, // 3
     25, // 4
-    30, // 5 (anything higher will be 6
+    30, // 5 (anything higher will be 6)
 ]
 
 const zoneRgbs: { [zone: number]: string } = {
@@ -53,6 +53,17 @@ const zoneRgbs: { [zone: number]: string } = {
     1: '#9bb',
     2: '#5b5',
     3: '#ffa',
+    4: '#f77',
+    5: '#f33',
+    6: '#ff028d'
+}
+
+const gradeRgbs: { [zone: number]: string } = {
+    NaN: '#555',
+    0: '#77b',
+    1: '#9bb',
+    2: '#575',
+    3: '#755',
     4: '#f77',
     5: '#f33',
     6: '#ff028d'

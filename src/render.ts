@@ -2,7 +2,6 @@ import { canvas } from "./dom.js"
 import { LatLon, LatLonCompact, model } from "./model/model.js"
 import { Colorer } from "./model/coloring.js"
 import { ARLINGTON, BOSTON, CAMBRIDGE, MEDFORD, SOMERVILLE } from "./cities.js"
-import { DISCONTIGUOUS_MS } from "./model/gpx_json.js"
 import { DEDISTORT } from "./model/dedistort.js"
 import { CompactActivity, getLatLngs } from "./model/activity.js"
 
@@ -194,8 +193,8 @@ export function renderImmediate() {
                 //     break
                 // }
 
-                // Only change colors at most once per 20 points
-                if ((i - strokeStyleIdx > 20) && colorer.color(i + 1) != strokeStyle) break
+                // Only change colors at most once per 10 points
+                if ((i - strokeStyleIdx > 10) && colorer.color(i + 1) != strokeStyle) break
 
                 i++
 

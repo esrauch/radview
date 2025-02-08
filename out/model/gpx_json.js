@@ -13,14 +13,3 @@ export const APPROXIMATE_HOME = {
     lat: 42.39951613195809
 };
 export const HOME_PRIVACY_CIRCLE_RADIUS_DEG = 0.0015;
-// export function activityToString(a: ActivityJson): string {
-//     const pts = a.pts
-//     const hrs = pts.map(pt => pt.hr || 0)
-//     const maxHr = Math.max(...hrs)
-//     const durationMs = pts[pts.length - 1].time - pts[0].time
-//     return `Dist: ${a.miles.toPrecision(3)}mi
-//        Moving Time: ${durationMsToHHMMSS(a.movingTimeMs)}
-//        Total Time: ${durationMsToHHMMSS(durationMs)}
-//        Max HR: ${maxHr == 0 ? "Not recorded" : maxHr}
-//     `
-// }

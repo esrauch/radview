@@ -32,7 +32,7 @@ const mphThresholds = [
     12, // 2
     16, // 3
     20, // 4
-    24, // 5 (anything higher will be 6
+    24, // 5 (anything higher will be 6)
 ];
 const eleThresholds = [
     5, // 0
@@ -40,7 +40,7 @@ const eleThresholds = [
     15, // 2
     20, // 3
     25, // 4
-    30, // 5 (anything higher will be 6
+    30, // 5 (anything higher will be 6)
 ];
 const zoneRgbs = {
     NaN: '#555',
@@ -48,6 +48,16 @@ const zoneRgbs = {
     1: '#9bb',
     2: '#5b5',
     3: '#ffa',
+    4: '#f77',
+    5: '#f33',
+    6: '#ff028d'
+};
+const gradeRgbs = {
+    NaN: '#555',
+    0: '#77b',
+    1: '#9bb',
+    2: '#575',
+    3: '#755',
     4: '#f77',
     5: '#f33',
     6: '#ff028d'

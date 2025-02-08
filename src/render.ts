@@ -4,6 +4,7 @@ import { Colorer } from "./model/coloring.js"
 import { ARLINGTON, BOSTON, CAMBRIDGE, MEDFORD, SOMERVILLE } from "./cities.js"
 import { DEDISTORT } from "./model/dedistort.js"
 import { CompactActivity } from "./model/activity.js"
+import { DISCONTIGUOUS_S } from "./model/gpx_json.js"
 
 
 let renderPending = false
@@ -37,18 +38,17 @@ function cachedPathTrueLatLon(pts: LatLon[]): Path2D {
 }
 
 // Can handle discontiguous
-function cachedPathDedistortPtJson(pts: LatLonCompact[]): Path2D {
+function cachedPathDedistortPtJson(pts: LatLonCompact[], times: number[]): Path2D {
     const cached: Path2D = (pts as any)['path2d']
     if (cached) return cached
     const p = new Path2D()
 
-    // let last = pts[0]
-    for (const pt of pts) {
-        // if (pt.time - last.time > DISCONTIGUOUS_MS)
-        // p.moveTo(pt.lon, pt.lat)
-        // else
-        p.lineTo(DEDISTORT * pt[1], pt[0])
-        // last = pt
+    for (let i = 0; i < pts.length - 1; ++i) {
+        const pt = pts[i]
+        if (i == 0 || (times[i] - times[i - 1] > DISCONTIGUOUS_S))
+            p.moveTo(DEDISTORT * pt[1], pt[0])
+        else
+            p.lineTo(DEDISTORT * pt[1], pt[0])
     }
     (pts as any)['path2d'] = p
     return p
@@ -146,6 +146,11 @@ export function renderImmediate() {
 
     function renderActivity(a: CompactActivity, colorer: Colorer) {
         const pts = a.latlngs
+        const times = a.times
+
+        if (pts.length != times.length) {
+            console.error('Malformed data: times and latlns length differs')
+        }
 
         if (pts.length == 0) return
 
@@ -154,7 +159,7 @@ export function renderImmediate() {
         const fixedColor = colorer.fixedColor()
         if (fixedColor) {
             ctx.strokeStyle = fixedColor
-            ctx.stroke(cachedPathDedistortPtJson(pts))
+            ctx.stroke(cachedPathDedistortPtJson(pts, times))
             return
         }
 
@@ -175,7 +180,7 @@ export function renderImmediate() {
 
             ctx.lineTo(DEDISTORT * pt[1], pt[0])
 
-            // let last_t = +pt.time
+            let last_t = times[i]
             // Add points to the same line as long as strokestyle
             // of the next point is the same. 
             // eslint-disable-next-line no-constant-condition
@@ -183,15 +188,15 @@ export function renderImmediate() {
                 const next = pts[i + 1]
                 if (!next) break
 
-                // const next_t = +next.time
-                // const delta = next_t - last_t
-                // last_t = next_t
+                const next_t = times[i + 1]
+                const delta = next_t - last_t
+                last_t = next_t
 
-                // // Don't draw lines between points where gps was off.
-                // if (delta > DISCONTIGUOUS_MS) {
-                //     i++
-                //     break
-                // }
+                // Don't draw lines between points where gps was off.
+                if (delta > DISCONTIGUOUS_S) {
+                    i++
+                    break
+                }
 
                 // Only change colors at most once per 10 points
                 if ((i - strokeStyleIdx > 10) && colorer.color(i + 1) != strokeStyle) break

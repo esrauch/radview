@@ -1,4 +1,5 @@
 import { durationSToHHMMSS } from "../util/time.js";
+import { ColorStrat } from "./coloring.js";
 export function getLatLngs(a) {
     const lls = a.streams.find(s => s.type == 'latlng');
     if (!lls)
@@ -24,4 +25,9 @@ export function activityToString(a) {
         `;
     }
     return ret;
+}
+export function eligibleForColoring(a, strat) {
+    if (strat != ColorStrat.HR)
+        return true;
+    return a.streams.find(s => s.type == 'heartrate') != null;
 }

@@ -95,6 +95,9 @@ export class Colorer extends Listenable {
         const stream = a.streams.find(s => s.type == streamName);
         this.stream = stream === null || stream === void 0 ? void 0 : stream.data;
     }
+    getStrat() {
+        return this.strat;
+    }
     setStrat(strat) {
         this.strat = strat;
         this.fn = stratImpl[strat];

@@ -1,4 +1,5 @@
 import { durationSToHHMMSS } from "../util/time.js"
+import { ColorStrat } from "./coloring.js"
 
 export type CompactActivityFile = CompactActivity[]
 
@@ -35,14 +36,17 @@ export function activityToString(a: CompactActivity): string {
         Average speed: ${a.average_speed_mph} mph
         Moving time: ${durationSToHHMMSS(a.moving_time_secs)} 
     `
-
     if (a.average_heartrate) {
         ret += `
             Average heartrate: ${a.average_heartrate}
         `
     }
-
     return ret
+}
+
+export function eligibleForColoring(a: CompactActivity, strat: ColorStrat): boolean {
+    if (strat != ColorStrat.HR) return true
+    return a.streams.find(s => s.type == 'heartrate') != null
 }
 
 export type LatLngCompact = [number, number]

@@ -58,17 +58,6 @@ const zoneRgbs: { [zone: number]: string } = {
     6: '#ff028d'
 }
 
-const gradeRgbs: { [zone: number]: string } = {
-    NaN: '#555',
-    0: '#77b',
-    1: '#9bb',
-    2: '#575',
-    3: '#755',
-    4: '#f77',
-    5: '#f33',
-    6: '#ff028d'
-}
-
 const stratImpl = {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     [ColorStrat.WHITE]: (_: any) => '#fff',
@@ -105,6 +94,10 @@ export class Colorer extends Listenable {
         if (!streamName) return
         const stream = a.streams.find(s => s.type == streamName)
         this.stream = stream?.data as number[]
+    }
+
+    getStrat(): ColorStrat {
+        return this.strat
     }
 
     setStrat(strat: ColorStrat) {

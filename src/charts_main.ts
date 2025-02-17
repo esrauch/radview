@@ -29,9 +29,9 @@ function init(activities: CompactActivity[]) {
         throw 'missing charts container'
     }
     const chartsContainer = chartsContainerMaybe
-    for (const a of activities) {
-        addActivity(activitySelect, a)
-    }
+    for (let i = activities.length - 1; i >= 0; --i)
+        addActivity(activitySelect, activities[i])
+
     activitySelect.addEventListener('change', () => {
         addCharts(activitySelect.selectedOptions[0].value)
     })
@@ -64,17 +64,27 @@ function init(activities: CompactActivity[]) {
 
     // The "all" charts
     function addAllCharts() {
-        let mphs: number[] = []
-        let grades: number[] = []
-        for (const a of activities) {
-            const mph = a.streams.find(s => s.type == 'mph')
-            const grade = a.streams.find(s => s.type == 'grade_pct')
-            if (mph && grade) {
-                mphs = mphs.concat(mph.data)
-                grades = grades.concat(grade.data)
-            }
+        // ride # vs ride properties
+        {
+            const dates = activities.map(a => +new Date(a.date))
+            addChart(dates, activities.map(a => a.average_speed_mph), 'date', 'avg mph', 'scatter')
+            addChart(dates, activities.map(a => a.miles), 'date', 'miles', 'scatter')
         }
-        addChart(grades, mphs, 'grade_pct', 'mph', 'scatter')
+
+        // mph vs grade
+        {
+            let mphs: number[] = []
+            let grades: number[] = []
+            for (const a of activities) {
+                const mph = a.streams.find(s => s.type == 'mph')
+                const grade = a.streams.find(s => s.type == 'grade_pct')
+                if (mph && grade) {
+                    mphs = mphs.concat(mph.data)
+                    grades = grades.concat(grade.data)
+                }
+            }
+            addChart(grades, mphs, 'grade_pct', 'mph', 'scatter')
+        }
     }
 
     function addChart(xs: number[], ys: number[], xtype: string, ytype: string,
@@ -94,13 +104,21 @@ function init(activities: CompactActivity[]) {
         el.appendChild(document.createElement('hr'))
 
         const ctx = c.getContext('2d')!
-        const minx = min(xs)
-        const miny = min(ys)
-        const maxx = max(xs)
-        const maxy = max(ys)
+
+        const lowx = min(xs)
+        const highx = max(xs)
+        const lowy = min(ys)
+        const highy = max(ys)
+
+        const minx = lowx - 0.1 * (highx - lowx)
+        const miny = lowy - 0.1 * (highy - lowy)
+        const maxx = highx + 0.1 * (highx - lowx)
+        const maxy = highy + 0.1 * (highy - lowy)
 
         ctx.strokeStyle = '#fff'
-        ctx.fillStyle = '#fff'
+        ctx.fillStyle = xs.length > 200 ? 'rgba(255,255,255,0.5)' : '#fff'
+        const ptSize = xs.length > 200 ? 0.5 : 5
+
         for (let i = 0; i < xs.length; ++i) {
             const x = (xs[i] - minx) / (maxx - minx)
             const y = (ys[i] - miny) / (maxy - miny)
@@ -108,7 +126,7 @@ function init(activities: CompactActivity[]) {
             const ypx = (1 - y) * c.height
             if (type == 'line') ctx.lineTo(xpx, ypx)
             else {
-                ctx.fillRect(xpx, ypx, 1, 1)
+                ctx.fillRect(xpx - ptSize, ypx - ptSize, 2 * ptSize, 2 * ptSize)
             }
         }
 
@@ -127,7 +145,9 @@ function init(activities: CompactActivity[]) {
         for (let i = 1; i < numXLabels; ++i) {
             const val = (i / numXLabels) * (maxx - minx) + minx
             const label =
-                xtype == 'time' ? durationSToHHMMSS(val) : val.toFixed(2)
+                xtype == 'time' ? durationSToHHMMSS(val) :
+                    xtype == 'date' ? new Date(val).toLocaleDateString() :
+                        val.toFixed(2)
             ctx.fillText(label, (i / numXLabels) * c.width, c.height)
         }
 

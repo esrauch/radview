@@ -28,7 +28,7 @@ class Model extends Listenable {
             Longest trip: ${Math.max(...miles).toPrecision(3)}mi
             Total dist: ${miles.reduce((prev, curr) => prev + curr, 0).toPrecision(3)} mi
         `;
-        const flat = activities.map((a) => a.latlngs).flat();
+        const flat = activities.map((a) => a.latlngs || []).flat();
         const minx = min(flat.map((pt) => pt[1]));
         const maxx = max(flat.map((pt) => pt[1]));
         const miny = min(flat.map((pt) => pt[0]));

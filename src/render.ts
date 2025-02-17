@@ -148,6 +148,10 @@ export function renderImmediate() {
         const pts = a.latlngs
         const times = a.times
 
+        if (!pts) {
+            return
+        }
+
         if (pts.length != times.length) {
             console.error('Malformed data: times and latlns length differs')
         }

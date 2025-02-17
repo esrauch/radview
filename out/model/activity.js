@@ -11,7 +11,8 @@ export function activityToString(a) {
     let ret = `
         Length: ${a.miles} miles
         Average speed: ${a.average_speed_mph} mph
-        Moving time: ${durationSToHHMMSS(a.moving_time_secs)} 
+        Moving time: ${durationSToHHMMSS(a.moving_time_secs)}
+        Type: ${a.type || 'bike'} 
     `;
     if (a.average_heartrate) {
         ret += `

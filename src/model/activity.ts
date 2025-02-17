@@ -9,6 +9,7 @@ export type CompactActivity = {
     id: number,
     name: string,
     date: string,
+    type: string,  // unset = bike 
     miles: number,
     moving_time_secs: number,
     average_speed_mph: number,
@@ -18,7 +19,7 @@ export type CompactActivity = {
 
     // These are all parallel arrays
     times: number[],
-    latlngs: LatLngCompact[],
+    latlngs?: LatLngCompact[],
     streams: Stream[]
 }
 
@@ -39,7 +40,8 @@ export function activityToString(a: CompactActivity): string {
     let ret = `
         Length: ${a.miles} miles
         Average speed: ${a.average_speed_mph} mph
-        Moving time: ${durationSToHHMMSS(a.moving_time_secs)} 
+        Moving time: ${durationSToHHMMSS(a.moving_time_secs)}
+        Type: ${a.type || 'bike'} 
     `
     if (a.average_heartrate) {
         ret += `

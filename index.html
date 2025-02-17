@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
 <head>
-    <title>Rad View</title>
+    <title>Map</title>
     <style>
         * {
             margin: 0;
@@ -87,7 +87,7 @@
 
         <hr>
 
-        <h2>Ride Filter</h2>
+        <h2>Activity Filter</h2>
         <select id="ride">
             <option label="Show All" value="all"></option>
         </select>
@@ -106,6 +106,7 @@
         <hr>
 
         <button id="save">Save as .png</button>
+        <button id="tocharts" onclick="document.location = 'charts.html'">See Charts</button>
 
         <hr>
 
@@ -116,5 +117,5 @@
         <button id="showOptions">Show options</button>
     </div>
 
-    <script type="module" src="out/main.js"></script>
+    <script type="module" src="out/map_main.js"></script>
 </body>

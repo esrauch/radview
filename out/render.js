@@ -52,7 +52,7 @@ function cachedPathDedistortPtJson(pts, times) {
 export function renderImmediate() {
     var _a;
     renderPending = false;
-    const start = performance.now();
+    // const start = performance.now()
     const canvasw = canvas.width;
     const canvash = canvas.height;
     canvas.width = canvasw;
@@ -208,7 +208,7 @@ export function renderImmediate() {
         ctx.strokeStyle = '#FFF';
         ctx.stroke(cachedPathDedistortXY(CAMBRIDGE));
     }
-    const end = performance.now();
-    console.log('Render time:', end - start);
+    // const end = performance.now()
+    // console.log('Render time:', end - start)
 }
 window.render = render;

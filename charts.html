@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Charts</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            border: 0;
+            border-radius: 0;
+            background-color: black;
+            color: white;
+            font-size: 16px;
+        }
+
+        button {
+            border: 1px solid white;
+            padding: 3px;
+        }
+
+        h2 {
+            padding-bottom: 6px;
+            font-size: 20px;
+        }
+
+        hr {
+            border-top: 1px solid white;
+            margin: 20px 0;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        td {
+            border: 1px solid white;
+            padding: 3px;
+        }
+
+        select {
+            outline: 1px solid white;
+            outline-offset: -1px;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>Activity Filter</h2>
+    <select id="activity">
+        <option label="All" value="all"></option>
+    </select>
+    <div class="desc"></div>
+
+    <hr>
+
+    <div id="chartsContainer"></div>
+
+    <script type="module" src="out/charts_main.js"></script>
+</body>
+
+</html>

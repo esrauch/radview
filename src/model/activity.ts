@@ -36,6 +36,10 @@ export function getHumanDate(a: CompactActivity): string {
     })
 }
 
+export function getHumanActivityName(a: CompactActivity): string {
+    return '[' + getHumanDate(a) + '] ' + a.name
+}
+
 export function activityToString(a: CompactActivity): string {
     let ret = `
         Length: ${a.miles} miles

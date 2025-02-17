@@ -59,7 +59,7 @@ function cachedPathDedistortPtJson(pts: LatLonCompact[], times: number[]): Path2
 export function renderImmediate() {
     renderPending = false
 
-    const start = performance.now()
+    // const start = performance.now()
     const canvasw = canvas.width
     const canvash = canvas.height
     canvas.width = canvasw
@@ -245,8 +245,8 @@ export function renderImmediate() {
         ctx.stroke(cachedPathDedistortXY(CAMBRIDGE))
     }
 
-    const end = performance.now()
-    console.log('Render time:', end - start)
+    // const end = performance.now()
+    // console.log('Render time:', end - start)
 }
 
 (window as any).render = render

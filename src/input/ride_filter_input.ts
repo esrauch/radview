@@ -1,5 +1,5 @@
 import { rideFilterSelect } from "../dom.js"
-import { eligibleForColoring, getHumanDate } from "../model/activity.js"
+import { eligibleForColoring, getHumanActivityName, getHumanDate } from "../model/activity.js"
 import { model } from "../model/model.js"
 
 
@@ -12,7 +12,7 @@ function createOption(label: string, value: number): HTMLOptionElement {
 
 export function initRideFilter() {
     const sel = rideFilterSelect
-    const options = model.activities.map((a, index) => createOption('[' + getHumanDate(a) + '] ' + a.name, index))
+    const options = model.activities.map((a, index) => createOption(getHumanActivityName(a), index))
     options.reverse()
     options.forEach(opt => sel.add(opt))
 

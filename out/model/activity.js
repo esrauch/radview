@@ -7,6 +7,9 @@ export function getHumanDate(a) {
         year: "numeric"
     });
 }
+export function getHumanActivityName(a) {
+    return '[' + getHumanDate(a) + '] ' + a.name;
+}
 export function activityToString(a) {
     let ret = `
         Length: ${a.miles} miles

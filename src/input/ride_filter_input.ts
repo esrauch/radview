@@ -1,5 +1,5 @@
 import { rideFilterSelect } from "../dom.js"
-import { eligibleForColoring, getHumanActivityName, getHumanDate } from "../model/activity.js"
+import { eligibleForColoring, getHumanActivityName } from "../model/activity.js"
 import { model } from "../model/model.js"
 
 

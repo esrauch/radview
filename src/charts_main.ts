@@ -35,12 +35,17 @@ function init(activities: CompactActivity[]) {
     activitySelect.addEventListener('change', () => {
         addCharts(activitySelect.selectedOptions[0].value)
     })
+    addCharts('all')
 
     function addCharts(id: string) {
-        if (id == 'all') return
+        chartsContainer.innerHTML = ''
+
+        if (id == 'all') {
+            addAllCharts()
+            return
+        }
         const a = activities.find(act => act.id == +id)
         if (!a) throw `missing activity ${id}`
-        chartsContainer.innerHTML = ''
 
         if (a.latlngs) {
             const lats = a.latlngs.map(ll => ll[0])
@@ -49,9 +54,33 @@ function init(activities: CompactActivity[]) {
         }
 
         for (const s of a.streams) addChart(a.times, s.data, 'time', s.type)
+
+        const mph = a.streams.find(s => s.type == 'mph')
+        const grade = a.streams.find(s => s.type == 'grade_pct')
+        if (mph && grade) {
+            addChart(grade.data, mph.data, 'grade_pct', 'mph', 'scatter')
+        }
     }
 
-    function addChart(xs: number[], ys: number[], xtype: string, ytype: string) {
+    // The "all" charts
+    function addAllCharts() {
+        let mphs: number[] = []
+        let grades: number[] = []
+        for (const a of activities) {
+            const mph = a.streams.find(s => s.type == 'mph')
+            const grade = a.streams.find(s => s.type == 'grade_pct')
+            if (mph && grade) {
+                mphs = mphs.concat(mph.data)
+                grades = grades.concat(grade.data)
+            }
+        }
+        addChart(grades, mphs, 'grade_pct', 'mph', 'scatter')
+    }
+
+    function addChart(xs: number[], ys: number[], xtype: string, ytype: string,
+        type?: 'line' | 'scatter'
+    ) {
+        type = type ?? 'line'
         if (xs.length != ys.length) {
             console.error('Mismatched x/y length')
             return
@@ -71,12 +100,19 @@ function init(activities: CompactActivity[]) {
         const maxy = max(ys)
 
         ctx.strokeStyle = '#fff'
+        ctx.fillStyle = '#fff'
         for (let i = 0; i < xs.length; ++i) {
             const x = (xs[i] - minx) / (maxx - minx)
             const y = (ys[i] - miny) / (maxy - miny)
-            ctx.lineTo(x * c.width, (1 - y) * c.height)
+            const xpx = x * c.width
+            const ypx = (1 - y) * c.height
+            if (type == 'line') ctx.lineTo(xpx, ypx)
+            else {
+                ctx.fillRect(xpx, ypx, 1, 1)
+            }
         }
-        ctx.stroke()
+
+        if (type == 'line') ctx.stroke()
 
         // y axis labels
         ctx.fillStyle = '#5da'

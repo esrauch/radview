@@ -5,7 +5,8 @@ export var ColorStrat;
     ColorStrat[ColorStrat["HR"] = 1] = "HR";
     ColorStrat[ColorStrat["SPEED"] = 2] = "SPEED";
     ColorStrat[ColorStrat["ELEVATION"] = 3] = "ELEVATION";
-    ColorStrat[ColorStrat["GRAY"] = 4] = "GRAY";
+    ColorStrat[ColorStrat["YEAR"] = 4] = "YEAR";
+    ColorStrat[ColorStrat["GRAY"] = 5] = "GRAY";
 })(ColorStrat || (ColorStrat = {}));
 function zone(val, thresholds) {
     if (!val || isNaN(val))
@@ -59,8 +60,11 @@ const stratImpl = {
     [ColorStrat.SPEED]: (mph) => zoneRgbs[zone(mph, mphThresholds)],
     [ColorStrat.ELEVATION]: (ele) => zoneRgbs[zone(ele, eleThresholds)],
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    [ColorStrat.YEAR]: (_) => '#fff',
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     [ColorStrat.GRAY]: (_) => '#373737',
 };
+const CURRENT_YEAR = new Date().getFullYear();
 export class Colorer extends Listenable {
     constructor(strat) {
         super();
@@ -76,6 +80,7 @@ export class Colorer extends Listenable {
             [ColorStrat.HR]: 'heartrate',
             [ColorStrat.SPEED]: 'mph',
             [ColorStrat.ELEVATION]: 'elevation_meters',
+            [ColorStrat.YEAR]: undefined,
             [ColorStrat.GRAY]: undefined,
             [ColorStrat.WHITE]: undefined
         };
@@ -98,11 +103,12 @@ export class Colorer extends Listenable {
         this.activity = a;
         this.refreshStream();
     }
-    fixedColor() {
-        if (this.strat == ColorStrat.WHITE)
-            return '#FFF';
-        if (this.strat == ColorStrat.GRAY)
-            return '#373737';
+    fixedColor(a) {
+        switch (this.strat) {
+            case ColorStrat.WHITE: return '#FFF';
+            case ColorStrat.GRAY: return '#373737';
+            case ColorStrat.YEAR: return new Date(a.date).getFullYear() == CURRENT_YEAR ? '#F73' : '#777';
+        }
         if (!this.stream)
             return 'rgba(0,0,0,0)';
     }

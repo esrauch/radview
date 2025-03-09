@@ -137,7 +137,7 @@ export function renderImmediate() {
         if (pts.length == 0)
             return;
         colorer.activateActivity(a);
-        const fixedColor = colorer.fixedColor();
+        const fixedColor = colorer.fixedColor(a);
         if (fixedColor) {
             ctx.strokeStyle = fixedColor;
             ctx.stroke(cachedPathDedistortPtJson(pts, times));

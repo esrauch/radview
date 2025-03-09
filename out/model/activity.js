@@ -25,7 +25,9 @@ export function activityToString(a) {
     return ret;
 }
 export function eligibleForColoring(a, strat) {
-    if (strat != ColorStrat.HR)
-        return true;
-    return a.streams.find(s => s.type == 'heartrate') != null;
+    if (strat == ColorStrat.HR)
+        return a.streams.find(s => s.type == 'heartrate') != null;
+    if (strat == ColorStrat.YEAR)
+        return new Date(a.date).getFullYear() == new Date().getFullYear();
+    return true;
 }

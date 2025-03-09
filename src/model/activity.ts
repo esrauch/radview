@@ -56,7 +56,8 @@ export function activityToString(a: CompactActivity): string {
 }
 
 export function eligibleForColoring(a: CompactActivity, strat: ColorStrat): boolean {
-    if (strat != ColorStrat.HR) return true
-    return a.streams.find(s => s.type == 'heartrate') != null
+    if (strat == ColorStrat.HR) return a.streams.find(s => s.type == 'heartrate') != null
+    if (strat == ColorStrat.YEAR) return new Date(a.date).getFullYear() == new Date().getFullYear()
+    return true
 }
 

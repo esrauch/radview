@@ -38,10 +38,10 @@ const mphThresholds = [
 const eleThresholds = [
     5, // 0
     10, // 1
-    15, // 2
-    20, // 3
-    25, // 4
-    30, // 5 (anything higher will be 6)
+    20, // 2
+    40, // 3
+    65, // 4
+    80, // 5 (anything higher will be 6)
 ];
 const zoneRgbs = {
     NaN: '#555',

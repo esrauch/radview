@@ -111,6 +111,7 @@ export function renderImmediate() {
     if (waters) {
         ctx.fillStyle = '#358'
         ctx.strokeStyle = '#358'
+        ctx.lineWidth = THIN_LINE_WIDTH
 
         for (const w of waters) {
             const path = cachedPathTrueLatLon(w.bank)

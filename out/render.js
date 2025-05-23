@@ -99,8 +99,6 @@ export function renderImmediate() {
                 ctx.fill(path);
             else
                 ctx.stroke(path);
-            if (!w.closed)
-                debugger;
         }
     }
     const paths = model.paths;

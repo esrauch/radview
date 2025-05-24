@@ -5,10 +5,10 @@ const MIN_RENDER_SCALE = 1000;
 export class Camera extends Listenable {
     constructor() {
         super();
-        this.left = -52.616;
-        this.top = 42.341;
-        this.right = -52.496;
-        this.bottom = 42.436;
+        this.left = -52.7;
+        this.top = 42.2;
+        this.right = -52.3;
+        this.bottom = 42.5;
         // left = -71
         // top = 42.341
         // right = -72

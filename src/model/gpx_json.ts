@@ -2,7 +2,7 @@
 // Number of ms between points to count as discontiguous
 // This affects both the gpx_json generation and
 // the rendering
-export const DISCONTIGUOUS_S = 60 * 5
+export const DISCONTIGUOUS_S = 60 * 15
 
 
 // The (dedistorted) lat/lon of a randomly offset location of home.

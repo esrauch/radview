@@ -37,7 +37,7 @@ class Model extends Listenable {
         this.desc = `
             Shortest trip: ${Math.min(...miles).toPrecision(3)}mi
             Longest trip: ${Math.max(...miles).toPrecision(3)}mi
-            Total dist: ${miles.reduce((prev, curr) => prev + curr, 0).toPrecision(3)} mi
+            Total dist: ${Math.round(miles.reduce((prev, curr) => prev + curr, 0))} mi
         `
         const flat = activities.map((a) => a.latlngs || []).flat()
 

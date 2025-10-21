@@ -14,7 +14,7 @@ class Model extends Listenable {
         this.paths = null;
         this.waters = null;
         this.cam = new Camera();
-        this.colorer = new Colorer(ColorStrat.WHITE);
+        this.colorer = new Colorer(ColorStrat.YEAR);
         this.deselectedColorer = new Colorer(ColorStrat.GRAY);
         this.citySelect = 'none';
     }

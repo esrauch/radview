@@ -1,11 +1,11 @@
 import { Listenable } from "../listenable.js";
 export var ColorStrat;
 (function (ColorStrat) {
-    ColorStrat[ColorStrat["WHITE"] = 0] = "WHITE";
-    ColorStrat[ColorStrat["HR"] = 1] = "HR";
-    ColorStrat[ColorStrat["SPEED"] = 2] = "SPEED";
-    ColorStrat[ColorStrat["ELEVATION"] = 3] = "ELEVATION";
-    ColorStrat[ColorStrat["YEAR"] = 4] = "YEAR";
+    ColorStrat[ColorStrat["YEAR"] = 0] = "YEAR";
+    ColorStrat[ColorStrat["WHITE"] = 1] = "WHITE";
+    ColorStrat[ColorStrat["HR"] = 2] = "HR";
+    ColorStrat[ColorStrat["SPEED"] = 3] = "SPEED";
+    ColorStrat[ColorStrat["ELEVATION"] = 4] = "ELEVATION";
     ColorStrat[ColorStrat["GRAY"] = 5] = "GRAY";
 })(ColorStrat || (ColorStrat = {}));
 function zone(val, thresholds) {

@@ -23,7 +23,7 @@ class Model extends Listenable {
     waters: Readonly<Water[]> | null = null
 
     readonly cam = new Camera()
-    readonly colorer = new Colorer(ColorStrat.WHITE)
+    readonly colorer = new Colorer(ColorStrat.YEAR)
     readonly deselectedColorer = new Colorer(ColorStrat.GRAY)
 
     citySelect: CitySelect = 'none'

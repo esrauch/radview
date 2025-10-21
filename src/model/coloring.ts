@@ -3,11 +3,11 @@ import { Listenable } from "../listenable.js"
 import { CompactActivity } from "./activity.js"
 
 export enum ColorStrat {
+    YEAR,
     WHITE,
     HR,
     SPEED,
     ELEVATION,
-    YEAR,
     GRAY,
 }
 
